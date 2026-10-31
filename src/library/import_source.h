@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "../core/metainfo.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,6 +44,11 @@ library_import_source_result_t library_import_source_set(
     library_import_source_t *out,
     library_import_source_type_t type,
     const char *uri);
+
+/* Parse a validated .torrent import source into metainfo. Returns 1 on
+ * success. Magnet resolution is handled by the future queue/metadata layer. */
+int library_import_load_torrent(const library_import_source_t *source,
+                                metainfo_t *out);
 
 const char *library_import_source_result_string(
     library_import_source_result_t result);
