@@ -8,6 +8,7 @@
 
 #include "../src/library/import_source.h"
 #include "../src/library/import_manager.h"
+#include "../src/library/source_center.h"
 
 
 void hex20(char out[41], const uint8_t hash[20]) {
@@ -264,6 +265,104 @@ static void test_rutracker_reference_persistence(void) {
     remove(path);
 }
 
+
+static void write_test_torrent(const char *path) {
+    FILE *file = fopen(path, "wb");
+    assert(file);
+    const char *prefix =
+        "d4:infod6:lengthi1e4:name4:test12:piece lengthi16384e6:pieces20:";
+    assert(fwrite(prefix, 1, strlen(prefix), file) == strlen(prefix));
+    for (int i = 0; i < 20; ++i)
+        assert(fputc('H', file) != EOF);
+    assert(fwrite("ee", 1, 2, file) == 2);
+    assert(fclose(file) == 0);
+}
+
+static void test_source_center_registry_and_import_actions(void) {
+    source_center_registry_t registry;
+    assert(source_center_load("catalog/sources-v1.json", &registry) ==
+           SOURCE_CENTER_OK);
+    assert(source_center_count(&registry) == 1);
+
+    const source_center_source_t *primary = source_center_primary(&registry);
+    assert(primary);
+    assert(strcmp(primary->id, "rutracker") == 0);
+    assert(strcmp(primary->title, "RuTracker") == 0);
+    assert(primary->is_primary);
+    assert(primary->enabled);
+    assert(primary->priority == 100);
+    assert(strcmp(primary->homepage,
+                  "https://rutracker.org/forum/index.php") == 0);
+    assert(primary->import_methods & SOURCE_IMPORT_TOPIC_REFERENCE);
+    assert(primary->import_methods & SOURCE_IMPORT_TORRENT_FILE);
+    assert(primary->import_methods & SOURCE_IMPORT_MAGNET_URI);
+    assert(source_center_at(&registry, 1) == NULL);
+    assert(source_center_find(&registry, "missing") == NULL);
+
+    const char *library_path =
+        "/tmp/retrotorrent-source-center-test/library.json";
+    remove(library_path);
+    personal_library_t library;
+    import_manager_t manager;
+    assert(import_manager_open(&manager, &library, library_path,
+                               "2026-10-31T20:30:00Z"));
+
+    assert(source_center_save_topic_reference(
+        &registry, &manager, "rutracker", "rutracker-topic-0001",
+        "Saved RuTracker topic", "snes",
+        "https://rutracker.org/forum/viewtopic.php?t=1234567",
+        "2026-10-31T20:31:00Z") == IMPORT_MANAGER_OK);
+
+    library_item_t *topic = personal_library_find(&library, "rutracker-topic-0001");
+    assert(topic);
+    assert(topic->source.type == LIBRARY_IMPORT_TRACKER_TOPIC);
+    assert(topic->status == LIBRARY_ITEM_IMPORTED);
+
+    assert(source_center_save_topic_reference(
+        &registry, &manager, "rutracker", "rutracker-topic-bad",
+        "Wrong host", "snes",
+        "https://rutracker.org.evil.invalid/forum/viewtopic.php?t=1234567",
+        "2026-10-31T20:32:00Z") == IMPORT_MANAGER_INVALID);
+
+    assert(source_center_import_magnet_uri(
+        &registry, &manager, "rutracker", "rutracker-magnet-0001",
+        "User supplied magnet", "psx",
+        "magnet:?xt=urn:btih:0123456789abcdef0123456789abcdef01234567&dn=Test",
+        "2026-10-31T20:33:00Z") == IMPORT_MANAGER_OK);
+
+    const char *torrent_path = "/tmp/retrotorrent-source-center.torrent";
+    write_test_torrent(torrent_path);
+    assert(source_center_import_torrent_file(
+        &registry, &manager, "rutracker", "rutracker-torrent-0001",
+        "User supplied torrent", "snes", torrent_path,
+        "2026-10-31T20:34:00Z") == IMPORT_MANAGER_OK);
+
+    library_item_t *torrent = personal_library_find(&library,
+                                                     "rutracker-torrent-0001");
+    assert(torrent);
+    assert(torrent->source.type == LIBRARY_IMPORT_TORRENT_FILE);
+    assert(strlen(torrent->info_hash) == 40);
+    assert(torrent->total_bytes == 1);
+
+    assert(import_manager_set_target(&manager, "rutracker-topic-0001",
+                                     "snes", "snes9x",
+                                     "sdmc:/tico/custom/snes",
+                                     "2026-10-31T20:35:00Z") == IMPORT_MANAGER_OK);
+
+    personal_library_t restored;
+    assert(personal_library_load(library_path, &restored) == LIBRARY_STORE_OK);
+    assert(restored.count == 3);
+    topic = personal_library_find(&restored, "rutracker-topic-0001");
+    assert(topic && topic->source.type == LIBRARY_IMPORT_TRACKER_TOPIC);
+    assert(strcmp(topic->target_uri, "sdmc:/tico/custom/snes") == 0);
+
+    remove(torrent_path);
+    remove(library_path);
+#ifndef _WIN32
+    assert(rmdir("/tmp/retrotorrent-source-center-test") == 0);
+#endif
+}
+
 static void test_library_rejects_invalid_json(void) {
     const char *path = "/tmp/retrotorrent-invalid-library.json";
     FILE *f = fopen(path, "wb");
@@ -284,6 +383,7 @@ int main(void) {
     test_library_persistence_and_manager();
     test_rutracker_reference_persistence();
     test_library_rejects_invalid_json();
+    test_source_center_registry_and_import_actions();
     puts("import source tests passed");
     return 0;
 }
