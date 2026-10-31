@@ -10,6 +10,8 @@
 #include <ctime>
 #include <functional>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "library/import_manager.h"
 #include "library/import_source.h"
