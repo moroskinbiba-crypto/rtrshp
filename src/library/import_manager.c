@@ -3,6 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 
+static void info_hash_hex(char out[41], const uint8_t hash[20]) {
+    static const char digits[] = "0123456789abcdef";
+    for (int i = 0; i < 20; ++i) {
+        out[i * 2] = digits[hash[i] >> 4];
+        out[i * 2 + 1] = digits[hash[i] & 15];
+    }
+    out[40] = '\0';
+}
+
 static int copy_text(char *out, size_t cap, const char *value, int required) {
     if (!value) return !required;
     size_t n = strlen(value);
@@ -122,6 +131,18 @@ import_manager_result_t import_manager_add(import_manager_t *manager,
     if (library_import_source_set(&item.source, source->type, source->uri) !=
         LIBRARY_IMPORT_SOURCE_OK)
         return IMPORT_MANAGER_INVALID;
+
+    /* Parse .torrent files at import time so the personal record already has
+       a stable transfer identity and expected byte count before queueing. */
+    if (item.source.type == LIBRARY_IMPORT_TORRENT_FILE) {
+        metainfo_t metainfo;
+        if (!library_import_load_torrent(&item.source, &metainfo))
+            return IMPORT_MANAGER_INVALID;
+        info_hash_hex(item.info_hash, metainfo.info_hash);
+        if (metainfo.total_length > 0)
+            item.total_bytes = (uint64_t)metainfo.total_length;
+        metainfo_free(&metainfo);
+    }
 
     item.status = LIBRARY_ITEM_IMPORTED;
     if (!personal_library_upsert(manager->library, &item))
