@@ -1,0 +1,17 @@
+name: Schema checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  library-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check personal library and catalogue schema invariants
+        run: node scripts/check_library_schema.mjs
