@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "primary_source": "rutracker",
+  "sources": [
+    {
+      "id": "rutracker",
+      "title": "RuTracker",
+      "kind": "external_tracker",
+      "priority": 100,
+      "enabled": true,
+      "homepage": "https://rutracker.org/forum/index.php",
+      "topic_url_prefix": "https://rutracker.org/forum/viewtopic.php?t=",
+      "import_methods": [
+        "save_topic_reference",
+        "import_torrent_file",
+        "import_magnet_uri"
+      ],
+      "automated_indexing": false,
+      "notes": "Primary user-selected external tracker. The user browses the site and manually imports a topic reference, a downloaded .torrent file, or a copied magnet URI."
+    }
+  ]
+}
