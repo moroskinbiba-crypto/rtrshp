@@ -18,16 +18,17 @@ transfer source.
 
 ## Current implementation
 
-- Registry: RuTracker is the primary source with priority 100.
+- Registry: RuTracker is the primary source with priority 100 in `catalog/sources-v1.json`.
+- Runtime source center: `src/library/source_center.c` loads that JSON file, validates it, sorts configured sources by priority, and exposes the primary source and supported actions through `source_center.h`.
+- UI integration contract: `docs/architecture/SOURCE_CENTER_UI.md` describes the data and action APIs the Borealis screen will call.
 - C validation: `library_import_source_set(..., LIBRARY_IMPORT_TRACKER_TOPIC, ...)` accepts only
   HTTPS topic URLs on `rutracker.org/forum/viewtopic.php?t=<numeric-id>` (optional simple query
   parameters are accepted).
 - Persistence: topic references are stored in the personal library as `tracker_topic`.
-- Transfers: `.torrent` files are parsed by the existing PipeNSX metainfo parser; magnet URI
-  validation exists, but resolving magnet metadata and starting a live transfer are not yet wired
-  into the PipeNSX queue.
+- Personal import actions: `source_center_save_topic_reference`, `source_center_import_torrent_file` and `source_center_import_magnet_uri` connect the source card actions to the persistent personal library. `.torrent` files are parsed by the PipeNSX metainfo parser and record info-hash/size; magnet metadata exchange and live queue submission are not yet wired into PipeNSX.
+- Tests: CI loads the real source registry, checks its RuTracker primary source, verifies supported actions, and tests saving topic references and imports.
 
-The current implementation does not crawl RuTracker, scrape topic pages, bulk-index commercial
+The source-center module is a backend/controller contract only: the repository still has no actual Borealis source screen or browser-launch adapter. The current implementation does not crawl RuTracker, scrape topic pages, bulk-index commercial
 game releases, or publish torrent links into a shared catalogue. This keeps source selection
 separate from the user's explicit personal imports. No RuTracker credentials are stored by
 RetroTorrent.
