@@ -5,6 +5,16 @@
 
 #include "../src/library/import_source.h"
 
+
+void hex20(char out[41], const uint8_t hash[20]) {
+    static const char digits[] = "0123456789abcdef";
+    for (int i = 0; i < 20; ++i) {
+        out[i * 2] = digits[hash[i] >> 4];
+        out[i * 2 + 1] = digits[hash[i] & 15];
+    }
+    out[40] = '\\0';
+}
+
 static void test_local_paths(void) {
     library_import_source_t source;
 
