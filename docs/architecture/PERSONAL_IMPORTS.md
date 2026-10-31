@@ -69,11 +69,21 @@ offer a preview of the exported metadata.
 
 ## Implementation boundaries
 
-The library schema is a persistence contract. The first C import-source layer now exists in
-`src/library/import_source.c`: it validates absolute SD/USB/PC paths, rejects parent-directory
-segments, validates BitTorrent v1 magnet `xt=urn:btih` values, and loads `.torrent` metainfo through
-the existing `metainfo_load` parser. It does not yet persist library JSON, resolve magnet metadata,
-create download jobs, or connect to a Switch UI/queue. Those are the next integration tasks.
+The first personal-import implementation now includes:
 
-The dependency-light checks are run by `.github/workflows/schema-checks.yml`; the C test target
-compiles the import-source module together with the existing metainfo, bencode and SHA-1 code.
+- `src/library/import_source.c`: validates absolute SD/USB/PC paths, rejects parent-directory
+  segments, validates BitTorrent v1 magnet `xt=urn:btih` values, and loads `.torrent` metainfo.
+- `src/library/library_store.c`: reads and writes the versioned JSON library, rejects malformed
+  records and duplicate IDs, and writes to a temporary file before replacing the previous save.
+- `src/library/import_manager.c`: adds/removes library items, remembers platform and destination,
+  tracks progress and state transitions, and recovers interrupted `downloading`/`verifying` jobs
+  as `paused` on startup. Imported `.torrent` files are parsed immediately and their info-hash
+  and total size are recorded.
+
+The manager is a persistent state layer, not the live PipeNSX transfer queue yet. It does not
+perform magnet metadata exchange, start peers, download pieces, or extract archives. Those require
+the later application-level queue and UI integration.
+
+The dependency-light checks run in `.github/workflows/schema-checks.yml`; tests cover source
+validation, torrent metainfo loading, library save/load, process-restart recovery, and legal state
+transitions.
