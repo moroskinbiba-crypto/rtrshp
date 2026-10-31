@@ -165,6 +165,23 @@ library_import_source_result_t library_import_source_set(
     return LIBRARY_IMPORT_SOURCE_OK;
 }
 
+
+int library_import_load_torrent(const library_import_source_t *source,
+                                metainfo_t *out) {
+    if (!source || !out)
+        return 0;
+
+    library_import_source_t checked;
+    if (library_import_source_set(&checked, source->type, source->uri) !=
+        LIBRARY_IMPORT_SOURCE_OK)
+        return 0;
+    if (checked.type != LIBRARY_IMPORT_TORRENT_FILE)
+        return 0;
+
+    memset(out, 0, sizeof(*out));
+    return metainfo_load(checked.uri, out);
+}
+
 const char *library_import_source_result_string(
     library_import_source_result_t result) {
     switch (result) {
