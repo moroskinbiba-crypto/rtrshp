@@ -115,6 +115,23 @@ static void test_torrent_file_metainfo_loading(void) {
     assert(mi.total_length == 1);
     metainfo_free(&mi);
 
+    /* Importing a .torrent into the personal library records its info-hash
+       and expected size before a real transfer queue is attached. */
+    const char *library_path = "/tmp/retrotorrent-torrent-import-library.json";
+    remove(library_path);
+    personal_library_t library;
+    import_manager_t manager;
+    assert(import_manager_open(&manager, &library, library_path,
+                               "2026-10-31T19:10:00Z"));
+    assert(import_manager_add(&manager, "torrent-import-001", "Test torrent",
+                              "snes", &source, "2026-10-31T19:11:00Z") ==
+           IMPORT_MANAGER_OK);
+    library_item_t *imported = personal_library_find(&library, "torrent-import-001");
+    assert(imported);
+    assert(strlen(imported->info_hash) == 40);
+    assert(imported->total_bytes == 1);
+    remove(library_path);
+
     assert(remove(path) == 0);
 
     assert(library_import_source_set(&source, LIBRARY_IMPORT_LOCAL_FILE,
