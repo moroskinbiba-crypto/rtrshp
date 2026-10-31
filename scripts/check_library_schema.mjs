@@ -18,7 +18,17 @@ assert.ok(!Object.hasOwn(itemSchema.properties, "rights"), "Personal library rec
 
 const sourceVariants = itemSchema.properties.source.oneOf;
 const sourceTypes = sourceVariants.map((variant) => variant.properties.type.const).sort();
-assert.deepEqual(sourceTypes, ["catalog_entry", "local_file", "magnet", "torrent_file"]);
+assert.deepEqual(sourceTypes, ["catalog_entry", "local_file", "magnet", "torrent_file", "tracker_topic"]);
+const trackerSource = sourceVariants.find((variant) => variant.properties.type.const === "tracker_topic");
+assert.ok(trackerSource, "RuTracker topic references must be supported by the personal library schema");
+assert.ok(trackerSource.properties.uri.pattern.includes("rutracker\\\\.org"), "RuTracker topic URLs must be limited to the official host");
+
+const sourceRegistry = await readJson("../catalog/sources-v1.json");
+assert.equal(sourceRegistry.primary_source, "rutracker");
+const primarySource = sourceRegistry.sources.find((source) => source.id === sourceRegistry.primary_source);
+assert.ok(primarySource?.enabled, "Primary source must be enabled");
+assert.equal(primarySource.kind, "external_tracker");
+assert.equal(primarySource.automated_indexing, false, "RuTracker is configured for user-selected manual imports");
 
 assert.equal(fixture.schema_version, 1);
 assert.ok(Array.isArray(fixture.items));
