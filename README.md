@@ -20,6 +20,7 @@ The first development target is to retain PipeNSX's proven download foundation w
 - Automatic organization into user-configured emulator and frontend folders, including tico where its current folder layout is configured.
 - Artwork and metadata cache.
 - Manual import of user-provided `.torrent` and magnet links.
+- RuTracker as the primary configurable external tracker, with manual topic references and personal `.torrent`/magnet imports.
 - Source allowlisting and catalogue signature/checksum verification.
 
 ## Content policy
@@ -32,9 +33,12 @@ The initial port retains PipeNSX's devkitPro / devkitA64 and Borealis build appr
 
 ## Personal library
 
+RuTracker is the primary external source in `catalog/sources-v1.json`. The app stores manually selected RuTracker topic references and accepts user-imported `.torrent`/magnet sources; it does not automatically scrape topic pages.
+
 Personal imports are stored separately from the shared catalogue. Local files, user-provided
 `.torrent` files and magnet URIs do not require a rights-proof field and are not published
-automatically. See [the personal import workflow](docs/architecture/PERSONAL_IMPORTS.md) and
+automatically. See [the personal import workflow](docs/architecture/PERSONAL_IMPORTS.md),
+[RuTracker source setup](docs/architecture/RUTRACKER_SOURCE.md) and
 [the library schema](library/library-v1.schema.json).
 
 The example library fixture is in `library/examples/`. The C personal-import layer now includes source validation (`src/library/import_source.c`),
