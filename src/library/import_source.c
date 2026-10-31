@@ -129,11 +129,17 @@ library_import_source_result_t library_import_source_set(
     library_import_source_t *out,
     library_import_source_type_t type,
     const char *uri) {
-    if (!out || !uri || !uri[0])
+    if (out)
+        memset(out, 0, sizeof(*out));
+    if (!out || !uri)
         return LIBRARY_IMPORT_SOURCE_INVALID_ARGUMENT;
 
-    size_t len = strlen(uri);
-    if (len >= LIBRARY_IMPORT_URI_MAX)
+    size_t len = 0;
+    while (len < LIBRARY_IMPORT_URI_MAX && uri[len])
+        ++len;
+    if (len == 0)
+        return LIBRARY_IMPORT_SOURCE_INVALID_ARGUMENT;
+    if (len == LIBRARY_IMPORT_URI_MAX)
         return LIBRARY_IMPORT_SOURCE_TOO_LONG;
     if (has_control_char(uri))
         return type == LIBRARY_IMPORT_MAGNET
