@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "library_id": "local-library-example",
+  "updated_at": "2026-10-31T12:00:00Z",
+  "items": [
+    {
+      "id": "local-homebrew-demo",
+      "title": "Homebrew Demo",
+      "platform": "snes",
+      "source": {
+        "type": "local_file",
+        "uri": "sdmc:/roms/snes/homebrew-demo.sfc",
+        "size": 1048576
+      },
+      "status": "ready",
+      "target": {
+        "platform": "snes",
+        "uri": "sdmc:/tico/custom-snes-library",
+        "relative_path": "homebrew-demo.sfc"
+      },
+      "files": [
+        {
+          "path": "homebrew-demo.sfc",
+          "size": 1048576,
+          "selected": true
+        }
+      ],
+      "created_at": "2026-10-31T12:00:00Z"
+    },
+    {
+      "id": "user-magnet-placeholder",
+      "title": "User supplied torrent",
+      "source": {
+        "type": "magnet",
+        "uri": "magnet:?xt=urn:btih:0000000000000000000000000000000000000000"
+      },
+      "status": "imported",
+      "created_at": "2026-10-31T12:00:00Z",
+      "user_note": "Synthetic fixture only; not a live torrent."
+    }
+  ]
+}
