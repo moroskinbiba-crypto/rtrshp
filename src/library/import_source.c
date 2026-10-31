@@ -140,7 +140,7 @@ static int valid_rutracker_topic(const char *uri) {
     while (isdigit((unsigned char)*p))
         ++p;
 
-    if (*p == '\\0')
+    if (*p == '\0')
         return 1;
     if (*p++ != '&')
         return 0;
