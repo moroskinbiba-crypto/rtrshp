@@ -12,7 +12,7 @@ void hex20(char out[41], const uint8_t hash[20]) {
         out[i * 2] = digits[hash[i] >> 4];
         out[i * 2 + 1] = digits[hash[i] & 15];
     }
-    out[40] = '\\0';
+    out[40] = '\0';
 }
 
 static void test_local_paths(void) {
