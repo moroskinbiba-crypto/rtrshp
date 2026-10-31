@@ -294,7 +294,7 @@ static int parse_source(json_span_t object, source_center_source_t *source) {
         strcmp(source->kind, "local_folder") != 0)
         return 0;
     if (!valid_https_url(source->homepage) || source->id[0] == '\0' ||
-        source->title[0] == '\0' || !source->enabled)
+        source->title[0] == '\0')
         return 0;
     if (source->topic_url_prefix[0] &&
         !valid_https_url(source->topic_url_prefix))
@@ -349,8 +349,8 @@ source_center_result_t source_center_load(const char *path,
     }
     buffer[read] = '\0';
 
-    const char *begin = buffer;
     const char *end = buffer + read;
+    const char *begin = skip_ws(buffer, end);
     const char *root_end = skip_value(begin, end, 0);
     if (!root_end || skip_ws(root_end, end) != end || *begin != '{') {
         free(buffer);
@@ -424,7 +424,7 @@ source_center_result_t source_center_load(const char *path,
             primary_found = 1;
         }
     }
-    if (!primary_found) {
+    if (!primary_found || !source_center_find(registry, registry->primary_source)->enabled) {
         memset(registry, 0, sizeof(*registry));
         return SOURCE_CENTER_NOT_FOUND;
     }
@@ -479,7 +479,7 @@ import_manager_result_t source_center_save_topic_reference(
     const char *platform, const char *topic_url, const char *created_at) {
     const source_center_source_t *source =
         check_source_method(registry, source_id, SOURCE_IMPORT_TOPIC_REFERENCE);
-    if (!source)
+    if (!source || strcmp(source->kind, "external_tracker") != 0 || !topic_url)
         return IMPORT_MANAGER_INVALID;
     if (source->topic_url_prefix[0] &&
         strncmp(topic_url, source->topic_url_prefix,
