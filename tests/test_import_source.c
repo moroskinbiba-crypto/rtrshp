@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "../src/library/import_source.h"
+#include "../src/library/import_manager.h"
 
 
 void hex20(char out[41], const uint8_t hash[20]) {
@@ -122,11 +123,90 @@ static void test_torrent_file_metainfo_loading(void) {
     assert(library_import_load_torrent(&source, &mi) == 0);
 }
 
+
+static void test_library_persistence_and_manager(void) {
+    const char *path = "/tmp/retrotorrent-personal-library-test.json";
+    remove(path);
+    remove("/tmp/retrotorrent-personal-library-test.json.tmp");
+
+    personal_library_t library;
+    import_manager_t manager;
+    assert(import_manager_open(&manager, &library, path, "2026-10-31T19:00:00Z"));
+    assert(library.count == 0);
+
+    library_import_source_t source;
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_MAGNET,
+        "magnet:?xt=urn:btih:0123456789abcdef0123456789abcdef01234567&dn=Test") ==
+        LIBRARY_IMPORT_SOURCE_OK);
+    assert(import_manager_add(&manager, "personal-test-001", "Test \"Game\"",
+                              "snes", &source, "2026-10-31T19:01:00Z") ==
+           IMPORT_MANAGER_OK);
+    assert(library.count == 1);
+    assert(import_manager_add(&manager, "personal-test-001", "Duplicate", "snes",
+                              &source, "2026-10-31T19:01:00Z") ==
+           IMPORT_MANAGER_DUPLICATE);
+
+    assert(import_manager_set_target(&manager, "personal-test-001", "snes",
+                                     "snes9x", "sdmc:/tico/custom/snes",
+                                     "2026-10-31T19:02:00Z") == IMPORT_MANAGER_OK);
+    assert(import_manager_set_status(&manager, "personal-test-001",
+                                     LIBRARY_ITEM_QUEUED,
+                                     "2026-10-31T19:03:00Z") == IMPORT_MANAGER_OK);
+    assert(import_manager_set_status(&manager, "personal-test-001",
+                                     LIBRARY_ITEM_DOWNLOADING,
+                                     "2026-10-31T19:04:00Z") == IMPORT_MANAGER_OK);
+    assert(import_manager_set_progress(&manager, "personal-test-001", 512, 1024, 0,
+                                       "2026-10-31T19:05:00Z") == IMPORT_MANAGER_OK);
+
+    /* Reopening simulates a process restart: active work becomes paused. */
+    personal_library_t restored;
+    import_manager_t manager2;
+    assert(import_manager_open(&manager2, &restored, path, "2026-10-31T19:06:00Z"));
+    assert(restored.count == 1);
+    library_item_t *item = personal_library_find(&restored, "personal-test-001");
+    assert(item);
+    assert(strcmp(item->title, "Test \"Game\"") == 0);
+    assert(strcmp(item->platform, "snes") == 0);
+    assert(strcmp(item->target_uri, "sdmc:/tico/custom/snes") == 0);
+    assert(strcmp(item->target_module, "snes9x") == 0);
+    assert(item->status == LIBRARY_ITEM_PAUSED);
+    assert(item->completed_bytes == 512);
+    assert(item->total_bytes == 1024);
+    assert(!item->transfer_verified);
+
+    assert(import_manager_set_status(&manager2, "personal-test-001",
+                                     LIBRARY_ITEM_QUEUED,
+                                     "2026-10-31T19:07:00Z") == IMPORT_MANAGER_OK);
+    assert(import_manager_set_status(&manager2, "personal-test-001",
+                                     LIBRARY_ITEM_READY,
+                                     "2026-10-31T19:08:00Z") == IMPORT_MANAGER_BAD_TRANSITION);
+    assert(import_manager_remove(&manager2, "personal-test-001") == IMPORT_MANAGER_OK);
+    assert(restored.count == 0);
+
+    personal_library_t empty;
+    assert(personal_library_load(path, &empty) == LIBRARY_STORE_OK);
+    assert(empty.count == 0);
+    remove(path);
+}
+
+static void test_library_rejects_invalid_json(void) {
+    const char *path = "/tmp/retrotorrent-invalid-library.json";
+    FILE *f = fopen(path, "wb");
+    assert(f);
+    assert(fputs("{not-json", f) >= 0);
+    assert(fclose(f) == 0);
+    personal_library_t library;
+    assert(personal_library_load(path, &library) == LIBRARY_STORE_INVALID);
+    remove(path);
+}
+
 int main(void) {
     test_local_paths();
     test_magnet_uris();
     test_bad_arguments_and_size();
     test_torrent_file_metainfo_loading();
+    test_library_persistence_and_manager();
+    test_library_rejects_invalid_json();
     puts("import source tests passed");
     return 0;
 }
