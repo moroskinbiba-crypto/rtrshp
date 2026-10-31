@@ -69,6 +69,11 @@ offer a preview of the exported metadata.
 
 ## Implementation boundaries
 
-The library schema is a persistence contract, not a claim that the UI or import handlers are already
-implemented. The next code stage is a small import service that validates source types, creates
-library records, and submits torrent sources to the existing queue interface.
+The library schema is a persistence contract. The first C import-source layer now exists in
+`src/library/import_source.c`: it validates absolute SD/USB/PC paths, rejects parent-directory
+segments, validates BitTorrent v1 magnet `xt=urn:btih` values, and loads `.torrent` metainfo through
+the existing `metainfo_load` parser. It does not yet persist library JSON, resolve magnet metadata,
+create download jobs, or connect to a Switch UI/queue. Those are the next integration tasks.
+
+The dependency-light checks are run by `.github/workflows/schema-checks.yml`; the C test target
+compiles the import-source module together with the existing metainfo, bencode and SHA-1 code.
