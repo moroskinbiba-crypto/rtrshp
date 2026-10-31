@@ -37,8 +37,12 @@ Personal imports are stored separately from the shared catalogue. Local files, u
 automatically. See [the personal import workflow](docs/architecture/PERSONAL_IMPORTS.md) and
 [the library schema](library/library-v1.schema.json).
 
-The example library fixture is in `library/examples/`. A dependency-free schema smoke check runs
-in GitHub Actions and can also be executed locally with:
+The example library fixture is in `library/examples/`. The initial C source validator lives in
+`src/library/import_source.c`: it validates SD/USB/absolute paths, rejects parent traversal,
+checks BitTorrent v1 magnet info-hashes and parses user-selected `.torrent` metainfo. The magnet
+metadata exchange, persistent library writer, download-queue integration and UI are not wired up
+yet. GitHub Actions runs both schema checks and the C import-source tests. The schema check can
+also be executed locally with:
 
 ```sh
 node scripts/check_library_schema.mjs
