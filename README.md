@@ -14,7 +14,7 @@ The first development target is to retain PipeNSX's proven download foundation w
 
 - Native Nintendo Switch UI built on Borealis.
 - Separate, signed catalogue manifest with platform metadata and rights information.
-- Platform filters for NES, SNES, Game Boy, Game Boy Color, Game Boy Advance, Nintendo 64, Nintendo DS, PlayStation, PSP, Sega systems, and other supported systems.
+- Platform filters for all 34 system slugs declared by the official tico 0.8.0 emulator modules, plus automatic discovery of additional/custom systems from installed `sdmc:/tico/modules/*/module.json` manifests. The canonical registry is `catalog/tico-systems-v0.8.0.json`.
 - BitTorrent downloads with DHT, PEX, trackers, persistent queue, resume, and piece verification.
 - Safe archive inspection and extraction.
 - Automatic organization into user-configured emulator and frontend folders, including tico where its current folder layout is configured.
