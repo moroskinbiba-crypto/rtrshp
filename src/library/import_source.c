@@ -125,6 +125,39 @@ static int valid_magnet(const char *uri) {
     return 0;
 }
 
+
+static int valid_rutracker_topic(const char *uri) {
+    static const char prefix[] =
+        "https://rutracker.org/forum/viewtopic.php?t=";
+    if (strncmp(uri, prefix, sizeof(prefix) - 1) != 0)
+        return 0;
+
+    const char *p = uri + sizeof(prefix) - 1;
+    if (!isdigit((unsigned char)*p))
+        return 0;
+    if (*p == '0')
+        return 0;
+    while (isdigit((unsigned char)*p))
+        ++p;
+
+    if (*p == '\\0')
+        return 1;
+    if (*p++ != '&')
+        return 0;
+
+    /* Permit additional numeric topic parameters only; block credentials,
+       fragments, alternate hosts and control characters. */
+    if (!*p)
+        return 0;
+    for (; *p; ++p) {
+        unsigned char ch = (unsigned char)*p;
+        if (!(isalnum(ch) || ch == '=' || ch == '&' || ch == '_' ||
+              ch == '-' || ch == '.'))
+            return 0;
+    }
+    return 1;
+}
+
 library_import_source_result_t library_import_source_set(
     library_import_source_t *out,
     library_import_source_type_t type,
@@ -155,6 +188,10 @@ library_import_source_result_t library_import_source_set(
     case LIBRARY_IMPORT_MAGNET:
         if (!valid_magnet(uri))
             return LIBRARY_IMPORT_SOURCE_INVALID_MAGNET;
+        break;
+    case LIBRARY_IMPORT_TRACKER_TOPIC:
+        if (!valid_rutracker_topic(uri))
+            return LIBRARY_IMPORT_SOURCE_INVALID_PATH;
         break;
     default:
         return LIBRARY_IMPORT_SOURCE_INVALID_TYPE;
