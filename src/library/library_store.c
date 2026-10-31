@@ -46,7 +46,7 @@ static int library_ensure_parent(const char *file_path) {
     if (n < 0 || (size_t)n >= sizeof(tmp))
         return 0;
 
-    *last = '\0';
+    char *last = strrchr(tmp, '/');
     if (!last)
         return 1;
     if (last == tmp)
