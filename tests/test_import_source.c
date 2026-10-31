@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 #include "../src/library/import_source.h"
 #include "../src/library/import_manager.h"
@@ -142,9 +145,9 @@ static void test_torrent_file_metainfo_loading(void) {
 
 
 static void test_library_persistence_and_manager(void) {
-    const char *path = "/tmp/retrotorrent-personal-library-test.json";
+    const char *path = "/tmp/retrotorrent-library-persist-test/library.json";
     remove(path);
-    remove("/tmp/retrotorrent-personal-library-test.json.tmp");
+    remove("/tmp/retrotorrent-library-persist-test/library.json.tmp");
 
     personal_library_t library;
     import_manager_t manager;
@@ -204,6 +207,9 @@ static void test_library_persistence_and_manager(void) {
     assert(personal_library_load(path, &empty) == LIBRARY_STORE_OK);
     assert(empty.count == 0);
     remove(path);
+#ifndef _WIN32
+    assert(rmdir("/tmp/retrotorrent-library-persist-test") == 0);
+#endif
 }
 
 static void test_library_rejects_invalid_json(void) {
