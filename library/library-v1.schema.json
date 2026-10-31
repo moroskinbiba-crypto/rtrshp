@@ -3,62 +3,124 @@
   "$id": "https://example.invalid/retrotorrent/library/library-v1.schema.json",
   "title": "RetroTorrent Personal Library v1",
   "type": "object",
-  "required": ["schema_version", "library_id", "updated_at", "items"],
+  "required": [
+    "schema_version",
+    "library_id",
+    "updated_at",
+    "items"
+  ],
   "properties": {
-    "schema_version": { "const": 1 },
-    "library_id": { "type": "string", "minLength": 1 },
-    "updated_at": { "type": "string", "format": "date-time" },
+    "schema_version": {
+      "const": 1
+    },
+    "library_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
     "items": {
       "type": "array",
-      "items": { "$ref": "#/$defs/item" }
+      "items": {
+        "$ref": "#/$defs/item"
+      }
     }
   },
   "$defs": {
     "item": {
       "type": "object",
-      "required": ["id", "title", "source", "status", "created_at"],
+      "required": [
+        "id",
+        "title",
+        "source",
+        "status",
+        "created_at"
+      ],
       "properties": {
         "id": {
           "type": "string",
           "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{2,95}$"
         },
-        "title": { "type": "string", "minLength": 1 },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
         "platform": {
           "type": "string",
           "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
           "description": "tico systems[].slug; may be omitted until the user assigns a platform."
         },
-        "region": { "type": "string" },
-        "language": { "type": "string" },
-        "year": { "type": "integer", "minimum": 1970, "maximum": 2100 },
-        "cover_uri": { "type": "string", "format": "uri" },
+        "region": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1970,
+          "maximum": 2100
+        },
+        "cover_uri": {
+          "type": "string",
+          "format": "uri"
+        },
         "source": {
           "oneOf": [
             {
               "type": "object",
-              "required": ["type", "uri"],
+              "required": [
+                "type",
+                "uri"
+              ],
               "properties": {
-                "type": { "const": "local_file" },
-                "uri": { "type": "string", "minLength": 1 },
-                "size": { "type": "integer", "minimum": 0 },
-                "modified_at": { "type": "string", "format": "date-time" }
+                "type": {
+                  "const": "local_file"
+                },
+                "uri": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "size": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "modified_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
               },
               "additionalProperties": false
             },
             {
               "type": "object",
-              "required": ["type", "uri"],
+              "required": [
+                "type",
+                "uri"
+              ],
               "properties": {
-                "type": { "const": "torrent_file" },
-                "uri": { "type": "string", "minLength": 1 }
+                "type": {
+                  "const": "torrent_file"
+                },
+                "uri": {
+                  "type": "string",
+                  "minLength": 1
+                }
               },
               "additionalProperties": false
             },
             {
               "type": "object",
-              "required": ["type", "uri"],
+              "required": [
+                "type",
+                "uri"
+              ],
               "properties": {
-                "type": { "const": "magnet" },
+                "type": {
+                  "const": "magnet"
+                },
                 "uri": {
                   "type": "string",
                   "pattern": "^magnet:\\?"
@@ -68,11 +130,41 @@
             },
             {
               "type": "object",
-              "required": ["type", "catalog_id", "entry_id"],
+              "required": [
+                "type",
+                "catalog_id",
+                "entry_id"
+              ],
               "properties": {
-                "type": { "const": "catalog_entry" },
-                "catalog_id": { "type": "string", "minLength": 1 },
-                "entry_id": { "type": "string", "minLength": 1 }
+                "type": {
+                  "const": "catalog_entry"
+                },
+                "catalog_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "entry_id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "uri"
+              ],
+              "properties": {
+                "type": {
+                  "const": "tracker_topic"
+                },
+                "uri": {
+                  "type": "string",
+                  "format": "uri",
+                  "pattern": "^https://rutracker\\\\.org/forum/viewtopic\\\\.php\\\\?t=[1-9][0-9]*(?:&[A-Za-z0-9_.=-]+)*$"
+                }
               },
               "additionalProperties": false
             }
@@ -102,8 +194,12 @@
               "minLength": 1,
               "description": "Resolved destination chosen from tico module paths or a user-selected folder; may point to SD or USB."
             },
-            "module": { "type": "string" },
-            "relative_path": { "type": "string" }
+            "module": {
+              "type": "string"
+            },
+            "relative_path": {
+              "type": "string"
+            }
           },
           "additionalProperties": false
         },
@@ -114,9 +210,17 @@
               "type": "string",
               "pattern": "^(?:[A-Fa-f0-9]{40}|[A-Fa-f0-9]{64})$"
             },
-            "total_bytes": { "type": "integer", "minimum": 0 },
-            "completed_bytes": { "type": "integer", "minimum": 0 },
-            "verified": { "type": "boolean" }
+            "total_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "completed_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "verified": {
+              "type": "boolean"
+            }
           },
           "additionalProperties": false
         },
@@ -124,22 +228,42 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["path", "size"],
+            "required": [
+              "path",
+              "size"
+            ],
             "properties": {
-              "path": { "type": "string", "minLength": 1 },
-              "size": { "type": "integer", "minimum": 0 },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0
+              },
               "sha256": {
                 "type": "string",
                 "pattern": "^[A-Fa-f0-9]{64}$"
               },
-              "selected": { "type": "boolean", "default": true }
+              "selected": {
+                "type": "boolean",
+                "default": true
+              }
             },
             "additionalProperties": false
           }
         },
-        "created_at": { "type": "string", "format": "date-time" },
-        "last_opened_at": { "type": "string", "format": "date-time" },
-        "user_note": { "type": "string" }
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_opened_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user_note": {
+          "type": "string"
+        }
       },
       "additionalProperties": false
     }
