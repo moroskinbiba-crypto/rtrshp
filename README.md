@@ -30,6 +30,23 @@ The built-in catalogue is intended only for homebrew, freeware, public-domain re
 
 The initial port retains PipeNSX's devkitPro / devkitA64 and Borealis build approach. Build instructions will be updated once the adapted dependency set and source tree have been imported and verified.
 
+## Personal library
+
+Personal imports are stored separately from the shared catalogue. Local files, user-provided
+`.torrent` files and magnet URIs do not require a rights-proof field and are not published
+automatically. See [the personal import workflow](docs/architecture/PERSONAL_IMPORTS.md) and
+[the library schema](library/library-v1.schema.json).
+
+The example library fixture is in `library/examples/`. A dependency-free schema smoke check runs
+in GitHub Actions and can also be executed locally with:
+
+```sh
+node scripts/check_library_schema.mjs
+```
+
+This check validates the JSON files and core schema invariants; it is not a substitute for the
+application's future import-service tests.
+
 ## Upstream and licensing
 
 - Upstream project: [PipeNSX](https://gitlab.com/pipensx-group/pipensx)
