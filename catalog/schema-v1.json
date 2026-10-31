@@ -30,9 +30,9 @@
           "title",
           "platform",
           "content_type",
-          "rights",
           "download",
-          "files"
+          "files",
+          "origin"
         ],
         "properties": {
           "id": {
@@ -195,9 +195,36 @@
               },
               "additionalProperties": false
             }
+          },
+          "origin": {
+            "enum": [
+              "catalog",
+              "user_import"
+            ],
+            "description": "catalog = shared published catalogue record; user_import = item manually added by this console's owner."
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "origin": {
+                  "const": "catalog"
+                }
+              },
+              "required": [
+                "origin"
+              ]
+            },
+            "then": {
+              "required": [
+                "rights"
+              ]
+            },
+            "else": {}
+          }
+        ]
       }
     }
   },
