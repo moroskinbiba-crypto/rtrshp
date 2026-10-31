@@ -21,6 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Compile import source validator
-        run: cc -std=c11 -Wall -Wextra -Werror -pedantic src/library/import_source.c src/core/metainfo.c src/core/bencode.c src/core/sha1.c tests/test_import_source.c -o /tmp/test_import_source
+        run: cc -std=c11 -Wall -Wextra -Werror -pedantic src/library/import_source.c src/library/library_store.c src/library/import_manager.c src/core/metainfo.c src/core/bencode.c src/core/sha1.c tests/test_import_source.c -o /tmp/test_import_source
       - name: Run import source tests
         run: /tmp/test_import_source
