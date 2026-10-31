@@ -36,18 +36,19 @@ The initial port retains PipeNSX's devkitPro / devkitA64 and Borealis build appr
 RuTracker is the primary external source in `catalog/sources-v1.json`. The app stores manually selected RuTracker topic references and accepts user-imported `.torrent`/magnet sources; it does not automatically scrape topic pages.
 
 Personal imports are stored separately from the shared catalogue. Local files, user-provided
-`.torrent` files and magnet URIs do not require a rights-proof field and are not published
-automatically. See [the personal import workflow](docs/architecture/PERSONAL_IMPORTS.md),
-[RuTracker source setup](docs/architecture/RUTRACKER_SOURCE.md) and
+`.torrent` files, magnet URIs and saved RuTracker topic references do not require a rights-proof
+field and are not published automatically. The runtime source center reads the source registry,
+orders sources by priority and exposes RuTracker plus its three manual import actions to the
+future Borealis UI. See [the personal import workflow](docs/architecture/PERSONAL_IMPORTS.md),
+[RuTracker source setup](docs/architecture/RUTRACKER_SOURCE.md),
+[the source-center UI contract](docs/architecture/SOURCE_CENTER_UI.md) and
 [the library schema](library/library-v1.schema.json).
 
 The example library fixture is in `library/examples/`. The C personal-import layer now includes source validation (`src/library/import_source.c`),
 JSON persistence (`src/library/library_store.c`) and state management
 (`src/library/import_manager.c`). It restores the library after restart, records platform and
 destination choices, persists transfer progress, turns interrupted active states into `paused`,
-and parses imported `.torrent` files to record their info-hash and total size. The live PipeNSX
-queue, magnet metadata exchange, piece transfer, archive extraction and Switch UI are not wired up
-yet. GitHub Actions runs schema checks and C import/library tests. The schema check can
+and parses imported `.torrent` files to record their info-hash and total size. The live PipeNSX queue, magnet metadata exchange, piece transfer, archive extraction, browser-launch adapter and actual Borealis screens are not wired up yet. GitHub Actions runs schema checks and C source-center/import/library tests. The schema check can
 also be executed locally with:
 
 ```sh
