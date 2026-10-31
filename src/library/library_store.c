@@ -46,12 +46,12 @@ static int library_ensure_parent(const char *file_path) {
     if (n < 0 || (size_t)n >= sizeof(tmp))
         return 0;
 
-    char *last = strrchr(tmp, '/');
+    *last = '\0';
     if (!last)
         return 1;
     if (last == tmp)
         return 1;
-    *last = '\\0';
+    *last = '\0';
 
     char *start = tmp + 1;
     char *colon = strchr(tmp, ':');
@@ -61,7 +61,7 @@ static int library_ensure_parent(const char *file_path) {
     for (char *p = start; *p; ++p) {
         if (*p != '/')
             continue;
-        *p = '\\0';
+        *p = '\0';
         if (!library_mkdir_checked(tmp)) {
             *p = '/';
             return 0;
