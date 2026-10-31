@@ -24,6 +24,9 @@ assert.ok(trackerSource, "RuTracker topic references must be supported by the pe
 assert.ok(trackerSource.properties.uri.pattern.includes("rutracker\\\\.org"), "RuTracker topic URLs must be limited to the official host");
 
 const sourceRegistry = await readJson("../catalog/sources-v1.json");
+const sourceRegistrySchema = await readJson("../catalog/source-registry-v1.schema.json");
+assert.equal(sourceRegistrySchema.properties.schema_version.const, 1);
+assert.ok(sourceRegistrySchema.properties.sources.items.properties.automated_indexing.type === "boolean");
 assert.equal(sourceRegistry.primary_source, "rutracker");
 const primarySource = sourceRegistry.sources.find((source) => source.id === sourceRegistry.primary_source);
 assert.ok(primarySource?.enabled, "Primary source must be enabled");
