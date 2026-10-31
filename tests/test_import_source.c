@@ -20,6 +20,9 @@ static void test_local_paths(void) {
     assert(library_import_source_set(&source, LIBRARY_IMPORT_LOCAL_FILE,
                                     "sdmc:/roms/../private/game.sfc") ==
            LIBRARY_IMPORT_SOURCE_INVALID_PATH);
+    assert(source.uri[0] == '\\0');
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_LOCAL_FILE, "") ==
+           LIBRARY_IMPORT_SOURCE_INVALID_ARGUMENT);
     assert(library_import_source_set(&source, LIBRARY_IMPORT_LOCAL_FILE,
                                     "relative/game.sfc") ==
            LIBRARY_IMPORT_SOURCE_INVALID_PATH);
