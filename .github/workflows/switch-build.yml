@@ -1,0 +1,43 @@
+name: Nintendo Switch NRO build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  switch-nro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout with pinned direct submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Build RetroTorrent NRO in devkitPro environment
+        run: |
+          docker run --rm \
+            --volume "${GITHUB_WORKSPACE}:/workspace" \
+            --workdir /workspace \
+            --env DEVKITPRO=/opt/devkitpro \
+            devkitpro/devkita64:20260219 \
+            bash -lc '
+              set -euo pipefail
+              test -f "$DEVKITPRO/libnx/lib/libdeko3d.a"
+              test -x "$DEVKITPRO/tools/bin/nacptool"
+              test -x "$DEVKITPRO/tools/bin/elf2nro"
+              cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+              cmake --build build --target switch --parallel 2
+              test -s build/switch/retrotorrent.nro
+              ls -lh build/switch/retrotorrent.nro
+            '
+
+      - name: Upload NRO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrotorrent-nro
+          path: build/switch/retrotorrent.nro
+          if-no-files-found: error
+          retention-days: 14
