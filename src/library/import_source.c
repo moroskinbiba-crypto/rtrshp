@@ -133,9 +133,7 @@ static int valid_rutracker_topic(const char *uri) {
         return 0;
 
     const char *p = uri + sizeof(prefix) - 1;
-    if (!isdigit((unsigned char)*p))
-        return 0;
-    if (*p == '\0')
+    if (!isdigit((unsigned char)*p) || *p == '0')
         return 0;
     while (isdigit((unsigned char)*p))
         ++p;
