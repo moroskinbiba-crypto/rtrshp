@@ -1,6 +1,7 @@
 #pragma once
 
 #include <borealis.hpp>
+#include <borealis/views/scrolling_frame.hpp>
 #include <switch.h>
 
 #include <algorithm>
@@ -53,12 +54,16 @@ public:
         addNavButton(navigation, "Настройки", Page::Settings);
         addView(navigation);
 
+        contentFrame_ = new brls::ScrollingFrame();
+        contentFrame_->setGrow(1.0f);
+        contentFrame_->setCornerRadius(14.0f);
+        contentFrame_->setBackgroundColor(nvgRGBA(39, 46, 58, 235));
+
         content_ = new brls::Box(brls::Axis::COLUMN);
-        content_->setGrow(1.0f);
         content_->setPadding(22.0f);
-        content_->setCornerRadius(14.0f);
-        content_->setBackgroundColor(nvgRGBA(39, 46, 58, 235));
-        addView(content_);
+        content_->setGrow(1.0f);
+        contentFrame_->setContentView(content_);
+        addView(contentFrame_);
 
         showPage(Page::Home);
     }
@@ -113,11 +118,17 @@ private:
             showPage(page);
             return true;
         });
+        navButtons_.push_back({button, page});
         row->addView(button);
     }
 
     void showPage(Page page) {
         currentPage_ = page;
+        for (const auto& entry : navButtons_) {
+            entry.first->setStyle(entry.second == currentPage_
+                                      ? &brls::BUTTONSTYLE_PRIMARY
+                                      : &brls::BUTTONSTYLE_DEFAULT);
+        }
         content_->clearViews();
 
         switch (page) {
@@ -175,7 +186,7 @@ private:
             return;
         }
 
-        addText(primary->title + "  ·  ОСНОВНОЙ ИСТОЧНИК", 24.0f,
+        addText(std::string(primary->title) + "  ·  ОСНОВНОЙ ИСТОЧНИК", 24.0f,
                 nvgRGB(110, 214, 190));
         addText(primary->homepage, 17.0f, nvgRGB(160, 185, 214));
         addText(primary->notes, 17.0f);
@@ -270,10 +281,9 @@ private:
         swkbdConfigSetGuideText(&keyboard, guide);
         swkbdConfigSetStringLenMax(
             &keyboard, static_cast<u32>(std::min<size_t>(capacity - 1, 500)));
-        const SwkbdResult result =
-            swkbdShow(&keyboard, output, capacity);
+        const Result result = swkbdShow(&keyboard, output, capacity);
         swkbdClose(&keyboard);
-        return result == SWKBD_OK && output[0] != '\0';
+        return R_SUCCEEDED(result) && output[0] != '\0';
     }
 
     std::string newItemId(const char* prefix) {
@@ -419,7 +429,9 @@ private:
     bool sourcesReady_ = false;
     bool libraryReady_ = false;
     Page currentPage_ = Page::Home;
+    brls::ScrollingFrame* contentFrame_ = nullptr;
     brls::Box* content_ = nullptr;
+    std::vector<std::pair<brls::Button*, Page>> navButtons_;
     uint32_t idSequence_ = 0;
 };
 
