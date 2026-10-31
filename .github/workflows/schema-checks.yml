@@ -1,4 +1,4 @@
-name: Schema checks
+name: Schema and import checks
 
 on:
   push:
@@ -15,3 +15,12 @@ jobs:
           node-version: 22
       - name: Check personal library and catalogue schema invariants
         run: node scripts/check_library_schema.mjs
+
+  import-source-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile import source validator
+        run: cc -std=c11 -Wall -Wextra -Werror -pedantic src/library/import_source.c tests/test_import_source.c -o /tmp/test_import_source
+      - name: Run import source tests
+        run: /tmp/test_import_source
