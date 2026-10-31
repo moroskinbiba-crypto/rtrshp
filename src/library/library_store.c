@@ -395,11 +395,11 @@ static int parse_item(const json_parser_t *p, size_t object,
         !object_string(p, source, "uri", item->source.uri, sizeof(item->source.uri), 1))
         return 0;
 
-    if (!object_string(p, object, "target", item->target_uri,
-                       sizeof(item->target_uri), 0)) {
-        /* target is an object, parsed below */
-        item->target_uri[0] = '\0';
-    }
+    library_import_source_t checked_source;
+    if (library_import_source_set(&checked_source, item->source.type,
+                                  item->source.uri) != LIBRARY_IMPORT_SOURCE_OK)
+        return 0;
+    item->source = checked_source;
     if (object_get(p, object, "target", &target)) {
         if (!object_string(p, target, "uri", item->target_uri,
                            sizeof(item->target_uri), 0) ||
@@ -509,8 +509,8 @@ static int write_json_string(FILE *f, const char *s) {
     return fputc('"', f) != EOF;
 }
 
-#define WSTR(k, v) do { if (fputs("\"" k "\":", f) == EOF || !write_json_string(f, (v))) return 0; } while (0)
-#define WNUM(k, v) do { if (fprintf(f, "\"" k "\":%llu", (unsigned long long)(v)) < 0) return 0; } while (0)
+#define WSTR(k, v) do { if (fputs("\"" k "\":", f) == EOF || !write_json_string(f, (v))) { ok = 0; goto save_cleanup; } } while (0)
+#define WNUM(k, v) do { if (fprintf(f, "\"" k "\":%llu", (unsigned long long)(v)) < 0) { ok = 0; goto save_cleanup; } } while (0)
 
 library_store_result_t personal_library_save(const char *path,
                                                const personal_library_t *library) {
@@ -568,6 +568,7 @@ library_store_result_t personal_library_save(const char *path,
         if (fputc('}', f) == EOF) { ok = 0; break; }
     }
     if (ok && fputs("]}\n", f) == EOF) ok = 0;
+save_cleanup:
     if (fflush(f) != 0) ok = 0;
     if (fclose(f) != 0) ok = 0;
     if (!ok) { remove(tmp); return LIBRARY_STORE_IO_ERROR; }
