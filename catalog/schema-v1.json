@@ -47,25 +47,15 @@
             "type": "string"
           },
           "platform": {
-            "enum": [
-              "nes",
-              "snes",
-              "gb",
-              "gbc",
-              "gba",
-              "n64",
-              "nds",
-              "3ds",
-              "master-system",
-              "genesis",
-              "game-gear",
-              "saturn",
-              "dreamcast",
-              "ps1",
-              "psp",
-              "arcade",
-              "other"
-            ]
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+            "description": "Exact tico module systems[].slug. New/custom tico systems are accepted; the runtime filter list is built from installed module manifests and augmented by catalog/tico-systems-v0.8.0.json."
+          },
+          "platform_title": {
+            "type": "string"
+          },
+          "emulator_module": {
+            "type": "string"
           },
           "region": {
             "type": "array",
