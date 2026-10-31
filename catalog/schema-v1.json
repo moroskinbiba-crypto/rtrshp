@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/retrotorrent/catalog/schema-v1.json",
+  "title": "RetroTorrent Catalogue v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "catalog_id",
+    "generated_at",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "catalog_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "platform",
+          "content_type",
+          "rights",
+          "download",
+          "files"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sort_title": {
+            "type": "string"
+          },
+          "platform": {
+            "enum": [
+              "nes",
+              "snes",
+              "gb",
+              "gbc",
+              "gba",
+              "n64",
+              "nds",
+              "3ds",
+              "master-system",
+              "genesis",
+              "game-gear",
+              "saturn",
+              "dreamcast",
+              "ps1",
+              "psp",
+              "arcade",
+              "other"
+            ]
+          },
+          "region": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "release_year": {
+            "type": "integer",
+            "minimum": 1970,
+            "maximum": 2100
+          },
+          "description": {
+            "type": "string"
+          },
+          "content_type": {
+            "enum": [
+              "rom",
+              "homebrew",
+              "rom-collection"
+            ]
+          },
+          "rights": {
+            "type": "object",
+            "required": [
+              "class",
+              "proof_url"
+            ],
+            "properties": {
+              "class": {
+                "enum": [
+                  "homebrew",
+                  "freeware",
+                  "public-domain",
+                  "authorized-redistribution"
+                ]
+              },
+              "proof_url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "license_id": {
+                "type": "string"
+              },
+              "authorization_note": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "artwork": {
+            "type": "object",
+            "properties": {
+              "cover_url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "screenshot_urls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          },
+          "download": {
+            "type": "object",
+            "required": [
+              "kind",
+              "info_hash"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "torrent",
+                  "magnet"
+                ]
+              },
+              "torrent_url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "magnet_uri": {
+                "type": "string"
+              },
+              "info_hash": {
+                "type": "string",
+                "pattern": "^(?:[A-Fa-f0-9]{40}|[A-Fa-f0-9]{64})$"
+              }
+            }
+          },
+          "files": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "path",
+                "size",
+                "sha256",
+                "role"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "size": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[A-Fa-f0-9]{64}$"
+                },
+                "role": {
+                  "enum": [
+                    "rom",
+                    "readme",
+                    "artwork",
+                    "supporting-file"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
