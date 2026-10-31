@@ -1,6 +1,6 @@
 # RetroTorrent
 
-RetroTorrent is a Nintendo Switch homebrew application for discovering, downloading, verifying, and organizing legally distributable retro-game files.
+RetroTorrent is a Nintendo Switch homebrew application for discovering, downloading, verifying, and organizing retro-game files from a shared catalogue or a user's personal imports.
 
 It is being built by adapting the architecture and reusable BitTorrent components of [PipeNSX](https://gitlab.com/pipensx-group/pipensx), under the GNU GPL v3.0. This repository is a derivative project; upstream attribution and third-party license notices are preserved as the port progresses.
 
@@ -24,7 +24,7 @@ The first development target is to retain PipeNSX's proven download foundation w
 
 ## Content policy
 
-The built-in catalogue is intended only for homebrew, freeware, public-domain releases, rights-cleared material, and other files the distributor is authorized to share. RetroTorrent will not ship commercial ROMs, BIOS files, copyrighted game images, or an index of unauthorized copies. Users may import their own legally obtained dumps.
+The built-in catalogue is intended only for homebrew, freeware, public-domain releases, rights-cleared material, and other files the distributor is authorized to share. RetroTorrent will not ship commercial ROMs, BIOS files, copyrighted game images, or an index of unauthorized copies. Personal imports (local files, user-supplied `.torrent` files and magnet URIs) do not require a rights-proof field. They remain local and are not published to the shared catalogue automatically.
 
 ## Build
 
