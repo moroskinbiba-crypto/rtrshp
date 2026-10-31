@@ -236,6 +236,34 @@ static void test_library_persistence_and_manager(void) {
 #endif
 }
 
+
+static void test_rutracker_reference_persistence(void) {
+    const char *path = "/tmp/retrotorrent-rutracker-reference.json";
+    remove(path);
+
+    personal_library_t library;
+    import_manager_t manager;
+    assert(import_manager_open(&manager, &library, path, "2026-10-31T20:00:00Z"));
+
+    library_import_source_t source;
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_TRACKER_TOPIC,
+        "https://rutracker.org/forum/viewtopic.php?t=7654321") ==
+        LIBRARY_IMPORT_SOURCE_OK);
+    assert(import_manager_add(&manager, "rutracker-ref-001", "Saved topic",
+                              "psx", &source, "2026-10-31T20:01:00Z") ==
+           IMPORT_MANAGER_OK);
+
+    personal_library_t restored;
+    assert(personal_library_load(path, &restored) == LIBRARY_STORE_OK);
+    assert(restored.count == 1);
+    library_item_t *saved = personal_library_find(&restored, "rutracker-ref-001");
+    assert(saved);
+    assert(saved->source.type == LIBRARY_IMPORT_TRACKER_TOPIC);
+    assert(strcmp(saved->source.uri,
+        "https://rutracker.org/forum/viewtopic.php?t=7654321") == 0);
+    remove(path);
+}
+
 static void test_library_rejects_invalid_json(void) {
     const char *path = "/tmp/retrotorrent-invalid-library.json";
     FILE *f = fopen(path, "wb");
@@ -254,6 +282,7 @@ int main(void) {
     test_bad_arguments_and_size();
     test_torrent_file_metainfo_loading();
     test_library_persistence_and_manager();
+    test_rutracker_reference_persistence();
     test_library_rejects_invalid_json();
     puts("import source tests passed");
     return 0;
