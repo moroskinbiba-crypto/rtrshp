@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Check personal library and catalogue schema invariants
+      - name: Check personal library, catalogue and RuTracker filters
         run: node scripts/check_library_schema.mjs
 
   import-source-tests:

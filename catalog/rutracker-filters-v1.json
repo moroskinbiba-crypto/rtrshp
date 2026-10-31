@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "source_id": "rutracker",
+  "search": {
+    "endpoint": "https://rutracker.org/forum/tracker.php",
+    "forum_ids": [
+      548
+    ],
+    "forum_title": "Игры для консолей",
+    "forum_source_url": "https://rutracker.org/forum/index.php",
+    "query_parameter": "nm",
+    "forum_parameter": "f[]"
+  },
+  "policy": {
+    "manual_topic_selection_required": true,
+    "automated_indexing": false,
+    "allowed_release_terms": [
+      "homebrew",
+      "freeware",
+      "public domain",
+      "public-domain",
+      "open source",
+      "opensource",
+      "CC0",
+      "Creative Commons",
+      "authorized redistribution"
+    ],
+    "rights_review_required": true,
+    "note": "Search terms are discovery hints only; they do not prove redistribution rights. Verify each selected release manually before adding it to any shared catalogue."
+  },
+  "query_rule": "For a selected tico platform, combine one search_terms value with one allowed_release_terms value in nm. Search only inside the verified console-games forum.",
+  "systems": [
+    {
+      "slug": "3ds",
+      "title": "Nintendo 3DS",
+      "group": "Nintendo",
+      "search_terms": [
+        "Nintendo 3DS",
+        "3DS",
+        "New Nintendo 3DS"
+      ]
+    },
+    {
+      "slug": "nds",
+      "title": "Nintendo DS",
+      "group": "Nintendo",
+      "search_terms": [
+        "Nintendo DS",
+        "NDS",
+        "DS"
+      ]
+    },
+    {
+      "slug": "ps2",
+      "title": "PlayStation 2",
+      "group": "Sony",
+      "search_terms": [
+        "PlayStation 2",
+        "PS2"
+      ]
+    },
+    {
+      "slug": "vb",
+      "title": "Virtual Boy",
+      "group": "Nintendo",
+      "search_terms": [
+        "Virtual Boy",
+        "Nintendo Virtual Boy"
+      ]
+    },
+    {
+      "slug": "ws",
+      "title": "WonderSwan",
+      "group": "Bandai",
+      "search_terms": [
+        "WonderSwan"
+      ]
+    },
+    {
+      "slug": "wsc",
+      "title": "WonderSwan Color",
+      "group": "Bandai",
+      "search_terms": [
+        "WonderSwan Color",
+        "WonderSwan"
+      ]
+    },
+    {
+      "slug": "sega-32x",
+      "title": "Sega 32X",
+      "group": "Sega",
+      "search_terms": [
+        "Sega 32X",
+        "32X"
+      ]
+    },
+    {
+      "slug": "atari-2600",
+      "title": "Atari 2600",
+      "group": "Atari",
+      "search_terms": [
+        "Atari 2600",
+        "Atari VCS",
+        "VCS"
+      ]
+    },
+    {
+      "slug": "msx",
+      "title": "MSX",
+      "group": "Computers",
+      "search_terms": [
+        "MSX"
+      ]
+    },
+    {
+      "slug": "msx2",
+      "title": "MSX2",
+      "group": "Computers",
+      "search_terms": [
+        "MSX2",
+        "MSX 2"
+      ]
+    },
+    {
+      "slug": "colecovision",
+      "title": "ColecoVision",
+      "group": "Other consoles",
+      "search_terms": [
+        "ColecoVision",
+        "Coleco Vision"
+      ]
+    },
+    {
+      "slug": "spectravideo",
+      "title": "Spectravideo SVI-318/328",
+      "group": "Computers",
+      "search_terms": [
+        "Spectravideo",
+        "SVI-318",
+        "SVI-328"
+      ]
+    },
+    {
+      "slug": "sc-3000",
+      "title": "Sega SC-3000",
+      "group": "Sega",
+      "search_terms": [
+        "Sega SC-3000",
+        "SC-3000"
+      ]
+    },
+    {
+      "slug": "gc",
+      "title": "Nintendo GameCube",
+      "group": "Nintendo",
+      "search_terms": [
+        "Nintendo GameCube",
+        "GameCube",
+        "GCN"
+      ]
+    },
+    {
+      "slug": "wii",
+      "title": "Nintendo Wii",
+      "group": "Nintendo",
+      "search_terms": [
+        "Nintendo Wii",
+        "Wii"
+      ]
+    },
+    {
+      "slug": "triforce",
+      "title": "Triforce",
+      "group": "Arcade",
+      "search_terms": [
+        "Triforce",
+        "Nintendo Triforce"
+      ]
+    },
+    {
+      "slug": "psx",
+      "title": "PlayStation",
+      "group": "Sony",
+      "search_terms": [
+        "PlayStation",
+        "PlayStation 1",
+        "PS1",
+        "PSX"
+      ]
+    },
+    {
+      "slug": "psp",
+      "title": "PlayStation Portable",
+      "group": "Sony",
+      "search_terms": [
+        "PlayStation Portable",
+        "PSP"
+      ]
+    },
+    {
+      "slug": "dc",
+      "title": "Sega Dreamcast",
+      "group": "Sega",
+      "search_terms": [
+        "Sega Dreamcast",
+        "Dreamcast"
+      ]
+    },
+    {
+      "slug": "naomi",
+      "title": "Sega NAOMI",
+      "group": "Arcade",
+      "search_terms": [
+        "Sega NAOMI",
+        "NAOMI"
+      ]
+    },
+    {
+      "slug": "atomiswave",
+      "title": "Sammy Atomiswave",
+      "group": "Arcade",
+      "search_terms": [
+        "Sammy Atomiswave",
+        "Atomiswave"
+      ]
+    },
+    {
+      "slug": "saturn",
+      "title": "Sega Saturn",
+      "group": "Sega",
+      "search_terms": [
+        "Sega Saturn",
+        "Saturn"
+      ]
+    },
+    {
+      "slug": "n64",
+      "title": "Nintendo 64",
+      "group": "Nintendo",
+      "search_terms": [
+        "Nintendo 64",
+        "N64"
+      ]
+    },
+    {
+      "slug": "nes",
+      "title": "Nintendo Entertainment System",
+      "group": "Nintendo",
+      "search_terms": [
+        "Nintendo Entertainment System",
+        "NES",
+        "Famicom"
+      ]
+    },
+    {
+      "slug": "snes",
+      "title": "Super Nintendo",
+      "group": "Nintendo",
+      "search_terms": [
+        "Super Nintendo",
+        "SNES",
+        "Super Famicom",
+        "SFC"
+      ]
+    },
+    {
+      "slug": "gb",
+      "title": "Game Boy",
+      "group": "Nintendo",
+      "search_terms": [
+        "Game Boy",
+        "GB"
+      ]
+    },
+    {
+      "slug": "gbc",
+      "title": "Game Boy Color",
+      "group": "Nintendo",
+      "search_terms": [
+        "Game Boy Color",
+        "GBC"
+      ]
+    },
+    {
+      "slug": "gba",
+      "title": "Game Boy Advance",
+      "group": "Nintendo",
+      "search_terms": [
+        "Game Boy Advance",
+        "GBA"
+      ]
+    },
+    {
+      "slug": "genesis",
+      "title": "Sega Mega Drive / Genesis",
+      "group": "Sega",
+      "search_terms": [
+        "Sega Mega Drive",
+        "Mega Drive",
+        "Genesis",
+        "MegaDrive"
+      ]
+    },
+    {
+      "slug": "master-system",
+      "title": "Sega Master System",
+      "group": "Sega",
+      "search_terms": [
+        "Sega Master System",
+        "Master System",
+        "SMS"
+      ]
+    },
+    {
+      "slug": "game-gear",
+      "title": "Sega Game Gear",
+      "group": "Sega",
+      "search_terms": [
+        "Sega Game Gear",
+        "Game Gear"
+      ]
+    },
+    {
+      "slug": "sg-1000",
+      "title": "Sega SG-1000",
+      "group": "Sega",
+      "search_terms": [
+        "Sega SG-1000",
+        "SG-1000"
+      ]
+    },
+    {
+      "slug": "sega-cd",
+      "title": "Sega CD / Mega-CD",
+      "group": "Sega",
+      "search_terms": [
+        "Sega CD",
+        "Mega-CD",
+        "Mega CD"
+      ]
+    },
+    {
+      "slug": "fbneo",
+      "title": "FinalBurn Neo Arcade",
+      "group": "Arcade",
+      "search_terms": [
+        "FinalBurn Neo Arcade"
+      ]
+    }
+  ]
+}

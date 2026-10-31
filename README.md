@@ -6,9 +6,9 @@ It is being built by adapting the architecture and reusable BitTorrent component
 
 ## Project status
 
-**Early application port. A native Borealis shell and Switch NRO packaging target are now in the repository, but no NRO has yet been verified on a Switch SDK runner or on hardware.**
+**Early port / architecture stage. No installable NRO is available yet.**
 
-The first native screen set contains Overview, Sources, Personal library and Settings. It loads the source registry from ROMFS, restores personal imports from SD, and exposes manual topic-reference, `.torrent`, magnet and local-ROM imports through the existing C controller.
+The first development target is to retain PipeNSX's proven download foundation while replacing its Nintendo Switch package catalogue and installer with a retro-game catalogue and ROM deployment workflow.
 
 ## Planned features
 
@@ -20,7 +20,7 @@ The first native screen set contains Overview, Sources, Personal library and Set
 - Automatic organization into user-configured emulator and frontend folders, including tico where its current folder layout is configured.
 - Artwork and metadata cache.
 - Manual import of user-provided `.torrent` and magnet links.
-- RuTracker as the primary configurable external tracker, with manual topic references and personal `.torrent`/magnet imports.
+- RuTracker as the primary configurable external tracker, with per-tico-platform manual search filters for homebrew/freeware/rights-cleared releases and personal `.torrent`/magnet imports.
 - Source allowlisting and catalogue signature/checksum verification.
 
 ## Content policy
@@ -29,16 +29,7 @@ The built-in catalogue is intended only for homebrew, freeware, public-domain re
 
 ## Build
 
-The first Switch app target uses the pinned Borealis + GLM submodules:
-
-```sh
-export DEVKITPRO=/opt/devkitpro
-git submodule update --init --recursive
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --target switch
-```
-
-The expected artifact is `build/switch/retrotorrent.nro`. The build target is present but not yet verified on a devkitPro runner; see [the Borealis port notes](docs/architecture/BOREALIS_UI_PORT.md).
+The initial port retains PipeNSX's devkitPro / devkitA64 and Borealis build approach. Build instructions will be updated once the adapted dependency set and source tree have been imported and verified.
 
 ## Personal library
 
@@ -48,19 +39,24 @@ Personal imports are stored separately from the shared catalogue. Local files, u
 `.torrent` files, magnet URIs and saved RuTracker topic references do not require a rights-proof
 field and are not published automatically. The runtime source center reads the source registry,
 orders sources by priority and exposes RuTracker plus its three manual import actions to the
-Borealis UI. See [the personal import workflow](docs/architecture/PERSONAL_IMPORTS.md),
-[RuTracker source setup](docs/architecture/RUTRACKER_SOURCE.md),
+future Borealis UI. See [the personal import workflow](docs/architecture/PERSONAL_IMPORTS.md),
+[RuTracker source and filters](docs/architecture/RUTRACKER_SOURCE.md),
 [the source-center UI contract](docs/architecture/SOURCE_CENTER_UI.md) and
 [the library schema](library/library-v1.schema.json).
 
-The example library fixture is in `library/examples/`. The C personal-import layer includes source validation (`src/library/import_source.c`),
+The example library fixture is in `library/examples/`. The C personal-import layer now includes source validation (`src/library/import_source.c`),
 JSON persistence (`src/library/library_store.c`) and state management
 (`src/library/import_manager.c`). It restores the library after restart, records platform and
-destination choices, persists transfer progress, turns interrupted active states into `paused`, and
-parses imported `.torrent` files to record their info-hash and total size. The live BitTorrent
-transfer queue, magnet metadata exchange, piece transfer, archive extraction, browser-launch
-adapter and tico deployment adapter are not wired up yet. GitHub Actions runs schema checks and C
-source-center/import/library tests.
+destination choices, persists transfer progress, turns interrupted active states into `paused`,
+and parses imported `.torrent` files to record their info-hash and total size. The live PipeNSX queue, magnet metadata exchange, piece transfer, archive extraction, browser-launch adapter and actual Borealis screens are not wired up yet. GitHub Actions runs schema checks and C source-center/import/library tests. The schema check can
+also be executed locally with:
+
+```sh
+node scripts/check_library_schema.mjs
+```
+
+This check validates the JSON files and core schema invariants; it is not a substitute for the
+application's future import-service tests.
 
 ## Upstream and licensing
 
@@ -71,8 +67,8 @@ source-center/import/library tests.
 
 ## Roadmap
 
-1. Finish the native UI shell and connect it to the controller.
-2. Adapt the reusable transfer engine into a persistent RetroTorrent queue.
+1. Import the reusable upstream download engine, platform layer, tests, and pinned dependencies.
+2. Remove Nintendo-specific package catalogue, title-management, and NSP/NSZ installation paths from the application build.
 3. Add a retro catalogue schema, rights metadata, console filtering, and search.
 4. Add ROM archive validation, safe extraction, deduplication, and destination mapping.
 5. Integrate tico and configurable standalone emulator paths.

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { buildRuTrackerSearchUrl } from "./rutracker-filter-url.mjs";
 
 const readJson = async (path) => JSON.parse(await readFile(new URL(path, import.meta.url), "utf8"));
 
@@ -60,4 +61,31 @@ assert.ok(
   "Shared catalogue entries must retain provenance requirements"
 );
 
-console.log(`Library schema smoke checks passed (${fixture.items.length} fixture items; ${sourceTypes.length} source types).`);
+
+const rutrackerFilters = await readJson("../catalog/rutracker-filters-v1.json");
+const rutrackerFilterSchema = await readJson("../catalog/rutracker-filters-v1.schema.json");
+assert.equal(rutrackerFilterSchema.properties.schema_version.const, 1);
+assert.equal(rutrackerFilters.source_id, "rutracker");
+assert.equal(rutrackerFilters.search.forum_ids[0], 548);
+assert.equal(rutrackerFilters.search.forum_title, "Игры для консолей");
+assert.equal(rutrackerFilters.policy.automated_indexing, false);
+assert.equal(rutrackerFilters.policy.manual_topic_selection_required, true);
+assert.equal(rutrackerFilters.policy.rights_review_required, true);
+assert.deepEqual(
+  rutrackerFilters.systems.map((system) => system.slug).sort(),
+  (await readJson("../catalog/tico-systems-v0.8.0.json")).systems.map((system) => system.slug).sort(),
+  "RuTracker platform filters must cover the checked-in tico system registry exactly"
+);
+for (const system of rutrackerFilters.systems) {
+  assert.ok(system.search_terms.length > 0, `Missing RuTracker search aliases for ${system.slug}`);
+  const url = new URL(buildRuTrackerSearchUrl(rutrackerFilters, system.slug, "homebrew"));
+  assert.equal(url.searchParams.get("nm"), `"${system.search_terms[0]}" "homebrew"`);
+  assert.ok(url.searchParams.getAll("f[]").includes("548"));
+}
+assert.throws(
+  () => buildRuTrackerSearchUrl(rutrackerFilters, "nes", "commercial rom"),
+  /allowlist/,
+  "Unsupported content terms must be rejected"
+);
+
+console.log(`Library/source/filter checks passed (${fixture.items.length} fixture items; ${sourceTypes.length} source types; ${rutrackerFilters.systems.length} platform filters).`);
