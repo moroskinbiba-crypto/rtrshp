@@ -1,0 +1,613 @@
+{
+  "schema_version": 1,
+  "frontend": "tico",
+  "frontend_version": "0.8.0",
+  "snapshot_date": "2026-10-31",
+  "source_docs": [
+    "https://github.com/ticohq/tico/releases/tag/0.8.0",
+    "https://forum.ticoverse.com/topic/149/creating-tico-modules/1"
+  ],
+  "discovery": {
+    "primary": "Read sdmc:/tico/modules/*/module.json and collect systems[] at runtime.",
+    "fallback": "This registry seeds the official tico 0.8.0 module set when manifests are not available.",
+    "dynamic": true,
+    "slug_field": "systems[].slug",
+    "title_field": "systems[].title",
+    "extensions_field": "systems[].extensions",
+    "naming_field": "systems[].naming"
+  },
+  "systems": [
+    {
+      "slug": "3ds",
+      "title": "Nintendo 3DS",
+      "group": "Nintendo",
+      "module_id": "dekopon",
+      "module": "Dekopon",
+      "repo": "danfromtico/tico-dekopon",
+      "extensions": [
+        ".3ds",
+        ".3dsx",
+        ".z3dsx",
+        ".elf",
+        ".axf",
+        ".cci",
+        ".zcci",
+        ".cxi",
+        ".zcxi",
+        ".app"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "nds",
+      "title": "Nintendo DS",
+      "group": "Nintendo",
+      "module_id": "drastic",
+      "module": "DraStic",
+      "repo": "ticohq/tico-drasticDS",
+      "extensions": [
+        ".nds",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "ps2",
+      "title": "PlayStation 2",
+      "group": "Sony",
+      "module_id": "nethersx2",
+      "module": "NetherSX2",
+      "repo": "ticohq/tico-NetherSX2",
+      "extensions": [
+        ".iso",
+        ".chd",
+        ".cso",
+        ".zso",
+        ".gz",
+        ".bin",
+        ".mdf",
+        ".img",
+        ".nrg"
+      ],
+      "naming": "redump",
+      "disc_based": true
+    },
+    {
+      "slug": "vb",
+      "title": "Virtual Boy",
+      "group": "Nintendo",
+      "module_id": "beetle_vb",
+      "module": "Beetle VB",
+      "repo": "ticohq/tico-beetle-vb",
+      "extensions": [
+        ".vb",
+        ".vboy",
+        ".bin",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "ws",
+      "title": "WonderSwan",
+      "group": "Bandai",
+      "module_id": "beetle_cygne",
+      "module": "Beetle Cygne",
+      "repo": "ticohq/tico-beetle-cygne",
+      "extensions": [
+        ".ws",
+        ".wsc",
+        ".pc2",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "wsc",
+      "title": "WonderSwan Color",
+      "group": "Bandai",
+      "module_id": "beetle_cygne",
+      "module": "Beetle Cygne",
+      "repo": "ticohq/tico-beetle-cygne",
+      "extensions": [
+        ".ws",
+        ".wsc",
+        ".pc2",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "sega-32x",
+      "title": "Sega 32X",
+      "group": "Sega",
+      "module_id": "picodrive",
+      "module": "PicoDrive",
+      "repo": "ticohq/tico-picodrive",
+      "extensions": [
+        ".32x",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "atari-2600",
+      "title": "Atari 2600",
+      "group": "Atari",
+      "module_id": "stella",
+      "module": "Stella",
+      "repo": "ticohq/tico-stella",
+      "extensions": [
+        ".a26",
+        ".bin",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "msx",
+      "title": "MSX",
+      "group": "Computers",
+      "module_id": "bluemsx",
+      "module": "blueMSX",
+      "repo": "ticohq/tico-blueMSX",
+      "extensions": [
+        ".rom",
+        ".ri",
+        ".mx1",
+        ".dsk",
+        ".cas",
+        ".m3u",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "msx2",
+      "title": "MSX2",
+      "group": "Computers",
+      "module_id": "bluemsx",
+      "module": "blueMSX",
+      "repo": "ticohq/tico-blueMSX",
+      "extensions": [
+        ".rom",
+        ".mx2",
+        ".dsk",
+        ".cas",
+        ".m3u",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "colecovision",
+      "title": "ColecoVision",
+      "group": "Other consoles",
+      "module_id": "bluemsx",
+      "module": "blueMSX",
+      "repo": "ticohq/tico-blueMSX",
+      "extensions": [
+        ".col",
+        ".rom",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "spectravideo",
+      "title": "Spectravideo SVI-318/328",
+      "group": "Computers",
+      "module_id": "bluemsx",
+      "module": "blueMSX",
+      "repo": "ticohq/tico-blueMSX",
+      "extensions": [
+        ".cas",
+        ".rom",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "sc-3000",
+      "title": "Sega SC-3000",
+      "group": "Sega",
+      "module_id": "bluemsx",
+      "module": "blueMSX",
+      "repo": "ticohq/tico-blueMSX",
+      "extensions": [
+        ".sc",
+        ".sf",
+        ".sg",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "gc",
+      "title": "Nintendo GameCube",
+      "group": "Nintendo",
+      "module_id": "dolphin",
+      "module": "Dolphin",
+      "repo": "ticohq/tico-dolphin",
+      "extensions": [
+        ".iso",
+        ".gcm",
+        ".rvz",
+        ".wbfs",
+        ".wia",
+        ".gcz",
+        ".ciso",
+        ".m3u"
+      ],
+      "naming": "redump",
+      "disc_based": true
+    },
+    {
+      "slug": "wii",
+      "title": "Nintendo Wii",
+      "group": "Nintendo",
+      "module_id": "dolphin",
+      "module": "Dolphin",
+      "repo": "ticohq/tico-dolphin",
+      "extensions": [
+        ".iso",
+        ".gcm",
+        ".rvz",
+        ".wbfs",
+        ".wia",
+        ".gcz",
+        ".ciso",
+        ".m3u",
+        ".wad"
+      ],
+      "naming": "redump",
+      "disc_based": true
+    },
+    {
+      "slug": "triforce",
+      "title": "Triforce",
+      "group": "Arcade",
+      "module_id": "dolphin",
+      "module": "Dolphin",
+      "repo": "ticohq/tico-dolphin",
+      "extensions": [
+        ".bin",
+        ".iso",
+        ".gcm",
+        ".rvz",
+        ".gcz",
+        ".ciso",
+        ".wia"
+      ],
+      "naming": "redump",
+      "disc_based": true
+    },
+    {
+      "slug": "psx",
+      "title": "PlayStation",
+      "group": "Sony",
+      "module_id": "duckstation",
+      "module": "DuckStation",
+      "repo": "ticohq/tico-duckstation",
+      "extensions": [
+        ".bin",
+        ".cue",
+        ".iso",
+        ".chd",
+        ".m3u",
+        ".pbp",
+        ".ecm",
+        ".exe",
+        ".psexe",
+        ".psf"
+      ],
+      "naming": "redump",
+      "disc_based": true
+    },
+    {
+      "slug": "psp",
+      "title": "PlayStation Portable",
+      "group": "Sony",
+      "module_id": "ppsspp",
+      "module": "PPSSPP",
+      "repo": "ticohq/tico-ppsspp",
+      "extensions": [
+        ".iso",
+        ".cso",
+        ".pbp",
+        ".chd",
+        ".m3u"
+      ],
+      "naming": "redump",
+      "disc_based": true
+    },
+    {
+      "slug": "dc",
+      "title": "Sega Dreamcast",
+      "group": "Sega",
+      "module_id": "flycast",
+      "module": "Flycast",
+      "repo": "ticohq/tico-flycast",
+      "extensions": [
+        ".cue",
+        ".gdi",
+        ".chd",
+        ".cdi",
+        ".m3u"
+      ],
+      "naming": "redump",
+      "disc_based": true
+    },
+    {
+      "slug": "naomi",
+      "title": "Sega NAOMI",
+      "group": "Arcade",
+      "module_id": "flycast",
+      "module": "Flycast",
+      "repo": "ticohq/tico-flycast",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".cmd"
+      ],
+      "naming": "arcade"
+    },
+    {
+      "slug": "atomiswave",
+      "title": "Sammy Atomiswave",
+      "group": "Arcade",
+      "module_id": "flycast",
+      "module": "Flycast",
+      "repo": "ticohq/tico-flycast",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".cmd"
+      ],
+      "naming": "arcade"
+    },
+    {
+      "slug": "saturn",
+      "title": "Sega Saturn",
+      "group": "Sega",
+      "module_id": "yabasanshiro",
+      "module": "YabaSanshiro",
+      "repo": "ticohq/tico-yabasanshiro",
+      "extensions": [
+        ".cue",
+        ".bin",
+        ".iso",
+        ".chd",
+        ".mdf",
+        ".ccd",
+        ".toc",
+        ".m3u"
+      ],
+      "naming": "redump",
+      "disc_based": true
+    },
+    {
+      "slug": "n64",
+      "title": "Nintendo 64",
+      "group": "Nintendo",
+      "module_id": "mupen64plus",
+      "module": "Mupen64Plus",
+      "repo": "ticohq/tico-mupen64plus",
+      "extensions": [
+        ".z64",
+        ".n64",
+        ".v64",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "nes",
+      "title": "Nintendo Entertainment System",
+      "group": "Nintendo",
+      "module_id": "fceumm",
+      "module": "FCEUmm",
+      "repo": "ticohq/tico-fceumm",
+      "extensions": [
+        ".nes",
+        ".fds",
+        ".unf",
+        ".unif",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "snes",
+      "title": "Super Nintendo",
+      "group": "Nintendo",
+      "module_id": "snes9x",
+      "module": "Snes9x",
+      "repo": "ticohq/tico-snes9x",
+      "extensions": [
+        ".sfc",
+        ".smc",
+        ".fig",
+        ".swc",
+        ".bs",
+        ".st",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "gb",
+      "title": "Game Boy",
+      "group": "Nintendo",
+      "module_id": "gambatte",
+      "module": "Gambatte",
+      "repo": "ticohq/tico-gambatte",
+      "extensions": [
+        ".gb",
+        ".gbc",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "gbc",
+      "title": "Game Boy Color",
+      "group": "Nintendo",
+      "module_id": "gambatte",
+      "module": "Gambatte",
+      "repo": "ticohq/tico-gambatte",
+      "extensions": [
+        ".gb",
+        ".gbc",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "gba",
+      "title": "Game Boy Advance",
+      "group": "Nintendo",
+      "module_id": "mgba",
+      "module": "mGBA",
+      "repo": "ticohq/tico-mgba",
+      "extensions": [
+        ".gba",
+        ".gb",
+        ".gbc",
+        ".sgb",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "genesis",
+      "title": "Sega Mega Drive / Genesis",
+      "group": "Sega",
+      "module_id": "genesis_plus_gx",
+      "module": "Genesis Plus GX",
+      "repo": "ticohq/tico-genesisplusgx",
+      "extensions": [
+        ".md",
+        ".bin",
+        ".gen",
+        ".smd",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "master-system",
+      "title": "Sega Master System",
+      "group": "Sega",
+      "module_id": "genesis_plus_gx",
+      "module": "Genesis Plus GX",
+      "repo": "ticohq/tico-genesisplusgx",
+      "extensions": [
+        ".sms",
+        ".bin",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "game-gear",
+      "title": "Sega Game Gear",
+      "group": "Sega",
+      "module_id": "genesis_plus_gx",
+      "module": "Genesis Plus GX",
+      "repo": "ticohq/tico-genesisplusgx",
+      "extensions": [
+        ".gg",
+        ".bin",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "sg-1000",
+      "title": "Sega SG-1000",
+      "group": "Sega",
+      "module_id": "genesis_plus_gx",
+      "module": "Genesis Plus GX",
+      "repo": "ticohq/tico-genesisplusgx",
+      "extensions": [
+        ".sg",
+        ".zip",
+        ".7z",
+        ".rar"
+      ],
+      "naming": "no-intro"
+    },
+    {
+      "slug": "sega-cd",
+      "title": "Sega CD / Mega-CD",
+      "group": "Sega",
+      "module_id": "genesis_plus_gx",
+      "module": "Genesis Plus GX",
+      "repo": "ticohq/tico-genesisplusgx",
+      "extensions": [
+        ".bin",
+        ".cue",
+        ".iso",
+        ".chd",
+        ".m3u"
+      ],
+      "naming": "redump",
+      "disc_based": true
+    },
+    {
+      "slug": "fbneo",
+      "title": "FinalBurn Neo Arcade",
+      "group": "Arcade",
+      "module_id": "fbneo",
+      "module": "FinalBurn Neo",
+      "repo": "ticohq/tico-fbneo",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".cmd"
+      ],
+      "naming": "arcade"
+    }
+  ]
+}
