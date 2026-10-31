@@ -8,7 +8,7 @@ extern "C" {
 
 typedef struct {
     personal_library_t *library;
-    const char *storage_path;
+    char storage_path[PERSONAL_LIBRARY_PATH_MAX];
     char updated_at[PERSONAL_LIBRARY_TIMESTAMP_MAX];
 } import_manager_t;
 
