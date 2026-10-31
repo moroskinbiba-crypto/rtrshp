@@ -1,23 +1,61 @@
-# Third-party notices
+# Third-Party Notices
 
-RetroTorrent adapts the PipeNSX project, whose source is licensed under GNU GPL v3.0.
-The upstream license text is preserved in [LICENSE](LICENSE).
+RetroTorrent itself is licensed under the GNU General Public License v3.0 (see
+[LICENSE](LICENSE)). Third-party dependencies retain their original licenses.
 
-The following upstream components are expected to be reused or retained during the port.
-Their notices must remain with the corresponding source and binary distributions:
+## Borealis
 
-- **PipeNSX / torrent core:** GNU GPL v3.0.
-- **Borealis:** Apache License 2.0.
-- **GLM:** Happy Bunny License or MIT License (see upstream notice).
-- **DHT:** MIT License.
-- **zstd:** BSD 3-Clause License.
-- **libnx-ext:** MIT License.
-- **qrcodegen:** MIT License.
-- **libutp:** retain the license and copyright notices included with its upstream source.
-- **LZMA SDK components:** retain the notices distributed with the relevant source files.
+Source: <https://github.com/XITRIX/borealis>
 
-This file is an interim inventory, not a substitute for the complete notices and license files
-shipped by every dependency. Before a release, compare this list with the exact pinned
-submodule revisions and vendored files in the final source tree.
+Pinned at commit `b1fa20d809ee3eeb05af8b7a3661ce3cb098635e` in
+`vendor/borealis`. Licensed under the Apache License 2.0. See
+`vendor/borealis/LICENSE`.
 
-Upstream project: https://gitlab.com/pipensx-group/pipensx
+## GLM
+
+Source: <https://github.com/g-truc/glm>
+
+Pinned at commit `8d1fd52e5ab5590e2c81768ace50c72bae28f2ed` in
+`vendor/glm`. Available under the Happy Bunny License or MIT License.
+See `vendor/glm/copying.txt`.
+
+## DHT
+
+Source: <https://github.com/jech/dht>
+
+The embedded implementation in `vendor/dht` is copyright Juliusz Chroboczek
+and licensed under the MIT license. Its source files retain the full notice.
+
+## zstd
+
+Source: <https://github.com/facebook/zstd>
+
+Pinned in `vendor/zstd`. Copyright Meta Platforms, Inc. and affiliates.
+Licensed under the BSD 3-Clause license. See `vendor/zstd/LICENSE`.
+
+## libnx-ext
+
+Source: <https://github.com/XorTroll/libnx-ext>
+
+Pinned in `vendor/libnx-ext`. Copyright XorTroll.
+Licensed under the MIT license. See `vendor/libnx-ext/LICENSE`.
+
+## qrcodegen
+
+Source: <https://github.com/nayuki/QR-Code-generator>
+
+Pinned in `vendor/qrcodegen`. Copyright Project Nayuki.
+Licensed under the MIT license. See `vendor/qrcodegen/LICENSE`.
+
+## NSZ/NCZ format reference
+
+The streaming decoder implements the public NCZ container format documented by
+the NSZ project:
+
+<https://github.com/nicoboss/nsz>
+
+No NSZ source code is included. The reference project is licensed under the MIT
+license.
+
+Goldleaf was reviewed for Nintendo content-management behavior, but no Goldleaf
+source code is included or copied into RetroTorrent.

@@ -1,0 +1,7 @@
+/build/
+/build-switch/
+/cmake-build-*/
+/*.nro
+/*.elf
+/*.nacp
+*.map
