@@ -346,6 +346,7 @@ static int source_type_parse(const char *s, library_import_source_type_t *t) {
     if (strcmp(s, "local_file") == 0) *t = LIBRARY_IMPORT_LOCAL_FILE;
     else if (strcmp(s, "torrent_file") == 0) *t = LIBRARY_IMPORT_TORRENT_FILE;
     else if (strcmp(s, "magnet") == 0) *t = LIBRARY_IMPORT_MAGNET;
+    else if (strcmp(s, "tracker_topic") == 0) *t = LIBRARY_IMPORT_TRACKER_TOPIC;
     else return 0;
     return 1;
 }
@@ -355,6 +356,7 @@ static const char *source_type_name(library_import_source_type_t t) {
     case LIBRARY_IMPORT_LOCAL_FILE: return "local_file";
     case LIBRARY_IMPORT_TORRENT_FILE: return "torrent_file";
     case LIBRARY_IMPORT_MAGNET: return "magnet";
+    case LIBRARY_IMPORT_TRACKER_TOPIC: return "tracker_topic";
     default: return NULL;
     }
 }
