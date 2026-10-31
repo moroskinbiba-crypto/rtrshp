@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
 
 #include "../src/library/import_source.h"
@@ -72,10 +73,50 @@ static void test_bad_arguments_and_size(void) {
            LIBRARY_IMPORT_SOURCE_INVALID_TYPE);
 }
 
+
+/* metainfo.c uses the project logger; the import-source unit test does not
+   need the logger implementation. */
+void log_msg(const char *fmt, ...) {
+    (void)fmt;
+}
+
+static void test_torrent_file_metainfo_loading(void) {
+    const char *path = "/tmp/rtrshp-import-source-test.torrent";
+    FILE *file = fopen(path, "wb");
+    assert(file);
+
+    const char *prefix =
+        "d4:infod6:lengthi1e4:name4:test12:piece lengthi16384e6:pieces20:";
+    assert(fwrite(prefix, 1, strlen(prefix), file) == strlen(prefix));
+    for (int i = 0; i < 20; ++i)
+        assert(fputc('H', file) != EOF);
+    assert(fwrite("ee", 1, 2, file) == 2);
+    assert(fclose(file) == 0);
+
+    library_import_source_t source;
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_TORRENT_FILE,
+                                    path) == LIBRARY_IMPORT_SOURCE_OK);
+
+    metainfo_t mi;
+    assert(library_import_load_torrent(&source, &mi) == 1);
+    assert(strcmp(mi.name, "test") == 0);
+    assert(mi.num_files == 1);
+    assert(mi.total_length == 1);
+    metainfo_free(&mi);
+
+    assert(remove(path) == 0);
+
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_LOCAL_FILE,
+                                    "/tmp/not-a-torrent.rom") ==
+           LIBRARY_IMPORT_SOURCE_OK);
+    assert(library_import_load_torrent(&source, &mi) == 0);
+}
+
 int main(void) {
     test_local_paths();
     test_magnet_uris();
     test_bad_arguments_and_size();
+    test_torrent_file_metainfo_loading();
     puts("import source tests passed");
     return 0;
 }
