@@ -12,7 +12,8 @@ extern "C" {
 typedef enum {
     LIBRARY_IMPORT_LOCAL_FILE = 0,
     LIBRARY_IMPORT_TORRENT_FILE = 1,
-    LIBRARY_IMPORT_MAGNET = 2
+    LIBRARY_IMPORT_MAGNET = 2,
+    LIBRARY_IMPORT_TRACKER_TOPIC = 3
 } library_import_source_type_t;
 
 typedef struct {
@@ -35,7 +36,8 @@ typedef enum {
  * LOCAL_FILE and TORRENT_FILE accept absolute paths, including Switch device
  * paths such as sdmc:/... and usb:/..., and reject parent-directory segments.
  * MAGNET requires a magnet:? URI containing a valid BitTorrent v1 (40-char
- * hex or 32-char base32) xt=urn:btih: value.
+ * hex or 32-char base32) xt=urn:btih: value. TRACKER_TOPIC accepts a RuTracker
+ * topic URL as a saved external reference; it does not scrape or resolve the page.
  *
  * This function does not open files, parse torrent metainfo, access the
  * network, or add a job to the download queue.
