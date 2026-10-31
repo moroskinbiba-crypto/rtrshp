@@ -80,6 +80,7 @@ for (const system of rutrackerFilters.systems) {
   assert.ok(system.search_terms.length > 0, `Missing RuTracker search aliases for ${system.slug}`);
   const url = new URL(buildRuTrackerSearchUrl(rutrackerFilters, system.slug, "homebrew"));
   assert.equal(url.searchParams.get("nm"), `"${system.search_terms[0]}" "homebrew"`);
+  assert.equal(url.searchParams.get("submit"), "1");
   assert.ok(url.searchParams.getAll("f[]").includes("548"));
 }
 assert.throws(

@@ -18,6 +18,7 @@ export function buildRuTrackerSearchUrl(filters, platformSlug, releaseTerm, alia
   }
   url.searchParams.set(filters.search.query_parameter,
     `"${system.search_terms[aliasIndex]}" "${releaseTerm}"`);
+  url.searchParams.set("submit", "1");
   url.searchParams.set("o", "10");
   url.searchParams.set("s", "2");
   return url.toString();
