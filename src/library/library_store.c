@@ -4,6 +4,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
+#include <sys/stat.h>
+#ifdef _WIN32
+#include <direct.h>
+#define library_mkdir(path) _mkdir(path)
+#else
+#define library_mkdir(path) mkdir((path), 0755)
+#endif
 
 #define LIBRARY_JSON_MAX (2u * 1024u * 1024u)
 #define JSON_TOKEN_MAX 32768
@@ -21,6 +29,47 @@ typedef struct {
     json_token_t tokens[JSON_TOKEN_MAX];
     int failed;
 } json_parser_t;
+
+
+static int library_mkdir_checked(const char *path) {
+    struct stat st;
+    if (library_mkdir(path) == 0)
+        return 1;
+    if (errno != EEXIST)
+        return 0;
+    return stat(path, &st) == 0 && S_ISDIR(st.st_mode);
+}
+
+static int library_ensure_parent(const char *file_path) {
+    char tmp[PERSONAL_LIBRARY_PATH_MAX + 8];
+    int n = snprintf(tmp, sizeof(tmp), "%s", file_path);
+    if (n < 0 || (size_t)n >= sizeof(tmp))
+        return 0;
+
+    char *last = strrchr(tmp, '/');
+    if (!last)
+        return 1;
+    if (last == tmp)
+        return 1;
+    *last = '\\0';
+
+    char *start = tmp + 1;
+    char *colon = strchr(tmp, ':');
+    if (colon && colon[1] == '/')
+        start = colon + 2;
+
+    for (char *p = start; *p; ++p) {
+        if (*p != '/')
+            continue;
+        *p = '\\0';
+        if (!library_mkdir_checked(tmp)) {
+            *p = '/';
+            return 0;
+        }
+        *p = '/';
+    }
+    return library_mkdir_checked(tmp);
+}
 
 static void skip_ws(json_parser_t *p) {
     while (p->pos < p->len &&
@@ -521,6 +570,7 @@ library_store_result_t personal_library_save(const char *path,
     int n = snprintf(tmp, sizeof(tmp), "%s%s", path, LIBRARY_TMP_SUFFIX);
     if (n < 0 || (size_t)n >= sizeof(tmp)) return LIBRARY_STORE_INVALID;
 
+    if (!library_ensure_parent(path)) return LIBRARY_STORE_IO_ERROR;
     FILE *f = fopen(tmp, "wb");
     if (!f) return LIBRARY_STORE_IO_ERROR;
     int ok = fputs("{\"schema_version\":1,", f) != EOF;
