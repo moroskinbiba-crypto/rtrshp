@@ -69,6 +69,30 @@ static void test_magnet_uris(void) {
            LIBRARY_IMPORT_SOURCE_INVALID_MAGNET);
 }
 
+
+static void test_rutracker_topic_references(void) {
+    library_import_source_t source;
+    const char *topic =
+        "https://rutracker.org/forum/viewtopic.php?t=1234567&start=20";
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_TRACKER_TOPIC,
+                                    topic) == LIBRARY_IMPORT_SOURCE_OK);
+    assert(source.type == LIBRARY_IMPORT_TRACKER_TOPIC);
+    assert(strcmp(source.uri, topic) == 0);
+
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_TRACKER_TOPIC,
+        "http://rutracker.org/forum/viewtopic.php?t=1234567") ==
+        LIBRARY_IMPORT_SOURCE_INVALID_PATH);
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_TRACKER_TOPIC,
+        "https://rutracker.org.evil.invalid/forum/viewtopic.php?t=1234567") ==
+        LIBRARY_IMPORT_SOURCE_INVALID_PATH);
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_TRACKER_TOPIC,
+        "https://rutracker.org/forum/viewtopic.php?t=0") ==
+        LIBRARY_IMPORT_SOURCE_INVALID_PATH);
+    assert(library_import_source_set(&source, LIBRARY_IMPORT_TRACKER_TOPIC,
+        "https://rutracker.org/forum/viewtopic.php?t=abc") ==
+        LIBRARY_IMPORT_SOURCE_INVALID_PATH);
+}
+
 static void test_bad_arguments_and_size(void) {
     library_import_source_t source;
     char oversized[LIBRARY_IMPORT_URI_MAX + 1];
@@ -226,6 +250,7 @@ static void test_library_rejects_invalid_json(void) {
 int main(void) {
     test_local_paths();
     test_magnet_uris();
+    test_rutracker_topic_references();
     test_bad_arguments_and_size();
     test_torrent_file_metainfo_loading();
     test_library_persistence_and_manager();
