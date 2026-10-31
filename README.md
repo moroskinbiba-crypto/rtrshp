@@ -37,11 +37,13 @@ Personal imports are stored separately from the shared catalogue. Local files, u
 automatically. See [the personal import workflow](docs/architecture/PERSONAL_IMPORTS.md) and
 [the library schema](library/library-v1.schema.json).
 
-The example library fixture is in `library/examples/`. The initial C source validator lives in
-`src/library/import_source.c`: it validates SD/USB/absolute paths, rejects parent traversal,
-checks BitTorrent v1 magnet info-hashes and parses user-selected `.torrent` metainfo. The magnet
-metadata exchange, persistent library writer, download-queue integration and UI are not wired up
-yet. GitHub Actions runs both schema checks and the C import-source tests. The schema check can
+The example library fixture is in `library/examples/`. The C personal-import layer now includes source validation (`src/library/import_source.c`),
+JSON persistence (`src/library/library_store.c`) and state management
+(`src/library/import_manager.c`). It restores the library after restart, records platform and
+destination choices, persists transfer progress, turns interrupted active states into `paused`,
+and parses imported `.torrent` files to record their info-hash and total size. The live PipeNSX
+queue, magnet metadata exchange, piece transfer, archive extraction and Switch UI are not wired up
+yet. GitHub Actions runs schema checks and C import/library tests. The schema check can
 also be executed locally with:
 
 ```sh
