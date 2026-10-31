@@ -39,12 +39,12 @@ Prefer isolating reusable download code behind a small interface first.
 
 ## Runtime pipeline
 
-1. Load the signed/allowlisted retro catalogue and its local cache.
-2. Filter catalogue entries by platform, region, language, genre and content type.
-3. Show an entry only when its rights metadata satisfies the catalogue policy.
-4. Resolve the selected entry to a validated magnet or torrent metainfo.
-5. Add it to the persistent PipeNSX-derived download queue.
-6. Download to a staging directory and verify every piece / final SHA-256.
+1. Load the shared retro catalogue and its local cache.
+2. Build the platform list from tico module manifests and filter shared entries by platform, region, language, genre and content type.
+3. Keep personal imports in a separate local library; they do not require a rights-proof field.
+4. Resolve a selected shared entry or user-provided import to validated torrent metainfo.
+5. Add the transfer to the persistent PipeNSX-derived download queue.
+6. Download to a staging directory and verify every piece and expected file size.
 7. Inspect archives and reject absolute paths, parent traversal, links and unsafe entries.
 8. Extract or copy supported ROM files into a user-selected platform directory.
 9. Atomically write an install record and refresh the frontend library if supported.
